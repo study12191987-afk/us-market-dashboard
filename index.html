@@ -84,14 +84,14 @@
       font-weight: bold;
     }
 
-    .up {
-      color: #16a34a;
-      font-size: 14px;
+    .top-date {
+      color: #94a3b8;
+      font-size: 11px;
       margin-top: 6px;
     }
 
-    .down {
-      color: #dc2626;
+    .up {
+      color: #16a34a;
       font-size: 14px;
       margin-top: 6px;
     }
@@ -333,7 +333,7 @@
   </div>
 
   <div class="demo-note">
-    ⚠️ 目前利率、通胀、部分经济数据、高收益债利差、WTI 原油和广义美元指数使用真实数据。
+    ⚠️ 目前利率、通胀、部分经济数据、高收益债利差、WTI 原油、广义美元指数和 VIX 使用真实数据。
     其他数字暂时仍为演示数据。
   </div>
 
@@ -361,8 +361,8 @@
         <span class="info-icon">i</span>
       </div>
 
-      <div class="value">15.8</div>
-      <div class="down">▼ -2.10%</div>
+      <div id="topVixValue" class="value">读取中...</div>
+      <div id="topVixDate" class="top-date"></div>
     </div>
 
   </div>
@@ -575,7 +575,11 @@
         恐慌指数 VIX
         <span class="info-icon">i</span>
       </div>
-      <div class="value">15.8</div>
+
+      <div class="value">
+        <span id="vixValue">读取中...</span>
+        <span id="vixDate" class="data-date"></span>
+      </div>
     </div>
 
     <div class="row">
@@ -843,12 +847,12 @@ const indicatorInfo = {
   vix: {
     title: "😨 恐慌指数 VIX",
     english: "CBOE Volatility Index",
-    what: "反映市场对未来标普500波动率的预期。",
-    why: "常被称为华尔街恐慌指数。",
-    high: "快速上升代表市场风险担忧增加。",
-    low: "较低通常代表市场比较平静。",
-    stocks: "VIX暴涨通常和股市急跌同时发生。",
-    remember: "💡 <strong>一句话记忆：</strong><br><br>VIX ↑ → 市场更害怕"
+    what: "VIX 反映市场根据标普500期权价格，对未来约30天市场波动程度的预期。",
+    why: "它常被称为华尔街“恐慌指数”，可以帮助观察投资者是否突然变得紧张。",
+    high: "VIX 快速上升通常代表市场担忧增加、预期波动扩大。非常高的 VIX 往往出现在市场剧烈下跌或重大不确定时期。",
+    low: "VIX 较低通常代表市场比较平静。不过长期过低也可能代表投资者过度放松。",
+    stocks: "VIX 快速上涨通常与美股下跌同时出现；VIX 回落通常说明市场紧张情绪在缓解。",
+    remember: "💡 <strong>一句话记忆：</strong><br><br>VIX ↑ → 市场更害怕<br>VIX ↓ → 市场更平静"
   },
 
   hySpread: {
@@ -976,7 +980,8 @@ async function loadMarketData() {
       !data.claims ||
       !data.hySpread ||
       !data.wti ||
-      !data.broadDollar
+      !data.broadDollar ||
+      !data.vix
     ) {
       throw new Error("缺少市场数据");
     }
@@ -998,6 +1003,7 @@ async function loadMarketData() {
     const hySpread = Number(data.hySpread.value);
     const wti = Number(data.wti.value);
     const broadDollar = Number(data.broadDollar.value);
+    const vix = Number(data.vix.value);
 
 
     document.getElementById("fedRateValue").textContent =
@@ -1111,6 +1117,20 @@ async function loadMarketData() {
       "指数｜数据日期：" + data.broadDollar.date;
 
 
+    document.getElementById("vixValue").textContent =
+      vix.toFixed(2);
+
+    document.getElementById("vixDate").textContent =
+      "收盘值｜数据日期：" + data.vix.date;
+
+
+    document.getElementById("topVixValue").textContent =
+      vix.toFixed(2);
+
+    document.getElementById("topVixDate").textContent =
+      "收盘｜" + data.vix.date;
+
+
     document.getElementById("liveNote").style.display =
       "block";
 
@@ -1142,7 +1162,9 @@ async function loadMarketData() {
       "claimsValue",
       "hySpreadValue",
       "wtiValue",
-      "broadDollarValue"
+      "broadDollarValue",
+      "vixValue",
+      "topVixValue"
     ];
 
 
@@ -1165,7 +1187,9 @@ async function loadMarketData() {
       "claimsDate",
       "hySpreadDate",
       "wtiDate",
-      "broadDollarDate"
+      "broadDollarDate",
+      "vixDate",
+      "topVixDate"
     ];
 
 
