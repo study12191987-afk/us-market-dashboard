@@ -16,7 +16,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Fetch latest Treasury data
+      - name: Fetch latest market data
         env:
           FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
         run: |
@@ -57,11 +57,18 @@ jobs:
               )
 
 
+          # 2年期美国国债
           treasury2 = get_latest_fred_value("DGS2")
+
+          # 10年期美国国债
           treasury10 = get_latest_fred_value("DGS10")
+
+          # 有效联邦基金利率
+          fed_rate = get_latest_fred_value("DFF")
 
 
           output = {
+              "fedRate": fed_rate,
               "treasury2": treasury2,
               "treasury10": treasury10
           }
