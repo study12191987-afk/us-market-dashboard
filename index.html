@@ -333,7 +333,7 @@
   </div>
 
   <div class="demo-note">
-    ⚠️ 目前利率、通胀、部分经济数据、高收益债利差和 WTI 原油使用真实数据。
+    ⚠️ 目前利率、通胀、部分经济数据、高收益债利差、WTI 原油和广义美元指数使用真实数据。
     其他数字暂时仍为演示数据。
   </div>
 
@@ -402,7 +402,6 @@
         有效联邦基金利率
         <span class="info-icon">i</span>
       </div>
-
       <div class="value">
         <span id="fedRateValue">读取中...</span>
         <span id="fedRateDate" class="data-date"></span>
@@ -414,7 +413,6 @@
         2年期美债
         <span class="info-icon">i</span>
       </div>
-
       <div class="value">
         <span id="treasury2Value">读取中...</span>
         <span id="treasury2Date" class="data-date"></span>
@@ -426,7 +424,6 @@
         10年期美债
         <span class="info-icon">i</span>
       </div>
-
       <div class="value">
         <span id="treasury10Value">读取中...</span>
         <span id="treasury10Date" class="data-date"></span>
@@ -438,7 +435,6 @@
         10年 - 2年利差
         <span class="info-icon">i</span>
       </div>
-
       <div class="value">
         <span id="spread210Value">计算中...</span>
         <span id="spread210Date" class="data-date"></span>
@@ -450,7 +446,6 @@
         10年期实际利率
         <span class="info-icon">i</span>
       </div>
-
       <div class="value">
         <span id="realYield10Value">读取中...</span>
         <span id="realYield10Date" class="data-date"></span>
@@ -470,7 +465,6 @@
         消费者物价 CPI
         <span class="info-icon">i</span>
       </div>
-
       <div class="value">
         <span id="cpiValue">读取中...</span>
         <span id="cpiDate" class="data-date"></span>
@@ -482,7 +476,6 @@
         核心 CPI
         <span class="info-icon">i</span>
       </div>
-
       <div class="value">
         <span id="coreCpiValue">读取中...</span>
         <span id="coreCpiDate" class="data-date"></span>
@@ -494,7 +487,6 @@
         核心 PCE
         <span class="info-icon">i</span>
       </div>
-
       <div class="value">
         <span id="corePceValue">读取中...</span>
         <span id="corePceDate" class="data-date"></span>
@@ -514,7 +506,6 @@
         失业率
         <span class="info-icon">i</span>
       </div>
-
       <div class="value">
         <span id="unemploymentValue">读取中...</span>
         <span id="unemploymentDate" class="data-date"></span>
@@ -526,7 +517,6 @@
         非农就业
         <span class="info-icon">i</span>
       </div>
-
       <div class="value">
         <span id="payrollsValue">读取中...</span>
         <span id="payrollsDate" class="data-date"></span>
@@ -538,7 +528,6 @@
         初请失业金
         <span class="info-icon">i</span>
       </div>
-
       <div class="value">
         <span id="claimsValue">读取中...</span>
         <span id="claimsDate" class="data-date"></span>
@@ -570,11 +559,15 @@
     </div>
 
     <div class="row">
-      <div class="label clickable" onclick="openInfo('dxy')">
-        美元指数 DXY
+      <div class="label clickable" onclick="openInfo('broadDollar')">
+        广义美元指数
         <span class="info-icon">i</span>
       </div>
-      <div class="value">101.2</div>
+
+      <div class="value">
+        <span id="broadDollarValue">读取中...</span>
+        <span id="broadDollarDate" class="data-date"></span>
+      </div>
     </div>
 
     <div class="row">
@@ -696,32 +689,32 @@ const indicatorInfo = {
   fedRate: {
     title: "🏦 有效联邦基金利率",
     english: "Effective Federal Funds Rate",
-    what: "这是美国银行之间隔夜联邦基金交易实际形成的有效利率。它通常会围绕美联储设定的联邦基金目标区间运行。",
-    why: "它能直接反映美联储货币政策在短期资金市场中的实际效果，并影响整个金融体系的资金成本。",
-    high: "有效联邦基金利率较高，通常代表货币政策偏紧，借贷成本较高。",
-    low: "有效联邦基金利率较低，通常代表货币政策更加宽松，资金成本下降。",
-    stocks: "利率下降通常有利于成长股和高估值股票，但如果下降是因为经济明显恶化，则需要结合就业和信用市场一起判断。",
-    remember: "💡 <strong>一句话记忆：</strong><br><br>Fed Funds Rate ↑ → 钱更贵<br>Fed Funds Rate ↓ → 钱更便宜"
+    what: "美国银行之间隔夜联邦基金交易实际形成的有效利率。",
+    why: "它反映美联储货币政策在短期资金市场中的实际效果。",
+    high: "利率较高通常代表货币政策偏紧。",
+    low: "利率较低通常代表货币政策更宽松。",
+    stocks: "利率下降通常有利于成长股，但还要结合经济状况判断。",
+    remember: "💡 <strong>一句话记忆：</strong><br><br>Fed Funds Rate ↑ → 钱更贵"
   },
 
   treasury2: {
     title: "🇺🇸 2年期美债",
     english: "2-Year Treasury Yield",
-    what: "美国政府发行的2年期国债收益率。它对市场预期未来一两年的美联储政策非常敏感。",
-    why: "如果市场突然认为美联储会加息或推迟降息，2年期美债收益率往往会迅速上升。",
-    high: "2年期收益率上升，通常代表市场预计未来利率会更高或维持高位更久。",
-    low: "2年期收益率下降，通常代表市场预计未来可能降息，或者经济正在明显放缓。",
-    stocks: "快速上涨通常会给科技股和成长股带来压力；下降则通常减轻估值压力。",
-    remember: "💡 <strong>一句话记忆：</strong><br><br>2年期美债 = 市场对美联储未来政策的投票"
+    what: "美国2年期国债收益率。",
+    why: "它对未来一两年的美联储政策预期非常敏感。",
+    high: "上升通常代表市场预计利率会维持高位。",
+    low: "下降通常代表市场预计未来可能降息。",
+    stocks: "快速上涨通常会增加成长股估值压力。",
+    remember: "💡 <strong>一句话记忆：</strong><br><br>2年期美债 = 市场对美联储政策的投票"
   },
 
   treasury10: {
     title: "🇺🇸 10年期美债",
     english: "10-Year Treasury Yield",
-    what: "美国政府10年期国债的市场收益率，是全球最重要的长期利率之一。",
-    why: "它会影响房贷、企业长期融资成本以及股票估值，特别是高估值成长股。",
-    high: "快速上涨代表长期资金成本上升，可能压低股票估值。",
-    low: "下降通常意味着长期资金成本降低，对成长股估值通常更友好。",
+    what: "美国10年期国债市场收益率。",
+    why: "影响房贷、企业融资和股票估值。",
+    high: "上升代表长期资金成本增加。",
+    low: "下降通常代表长期资金成本降低。",
     stocks: "科技股通常对10年期美债变化比较敏感。",
     remember: "💡 <strong>一句话记忆：</strong><br><br>10年期美债 ↑ → 股票估值压力 ↑"
   },
@@ -729,11 +722,11 @@ const indicatorInfo = {
   spread210: {
     title: "📐 10年 - 2年利差",
     english: "10Y - 2Y Treasury Spread",
-    what: "用10年期美国国债收益率减去2年期美国国债收益率。",
-    why: "它帮助观察收益率曲线以及市场对未来经济的预期。",
-    high: "利差为正并扩大，代表收益率曲线更加陡峭。",
-    low: "如果利差低于0，代表收益率曲线倒挂。",
-    stocks: "不能单独用它预测股市，需要结合就业和信用市场判断。",
+    what: "10年期国债收益率减去2年期国债收益率。",
+    why: "帮助观察收益率曲线和经济预期。",
+    high: "利差为正并扩大，代表曲线更陡峭。",
+    low: "低于0代表收益率曲线倒挂。",
+    stocks: "需要结合就业和信用市场一起判断。",
     remember: "💡 <strong>一句话记忆：</strong><br><br>10Y - 2Y < 0 = 倒挂"
   },
 
@@ -741,21 +734,21 @@ const indicatorInfo = {
     title: "🧮 10年期实际利率",
     english: "10-Year Real Yield",
     what: "这里使用10年期TIPS市场收益率。",
-    why: "它反映长期真实资金成本。",
+    why: "反映长期真实资金成本。",
     high: "实际利率上升会增加高估值股票压力。",
-    low: "实际利率下降通常对成长股更友好。",
-    stocks: "科技股通常对实际利率非常敏感。",
+    low: "下降通常对成长股更友好。",
+    stocks: "科技股通常对实际利率较敏感。",
     remember: "💡 <strong>一句话记忆：</strong><br><br>实际利率 ↑ → 高估值股票压力 ↑"
   },
 
   cpi: {
     title: "🔥 消费者物价 CPI",
     english: "Consumer Price Index — YoY",
-    what: "衡量消费者商品和服务价格变化，这里显示同比 YoY。",
-    why: "CPI 是市场最关注的美国通胀指标之一。",
-    high: "CPI持续偏高会增加高利率持续时间。",
-    low: "CPI下降通常代表通胀正在降温。",
-    stocks: "CPI低于预期通常对成长股比较有利。",
+    what: "衡量消费者商品和服务价格变化。",
+    why: "美国最重要的通胀指标之一。",
+    high: "持续偏高会增加高利率持续时间。",
+    low: "下降通常代表通胀降温。",
+    stocks: "CPI降温通常减轻成长股估值压力。",
     remember: "💡 <strong>一句话记忆：</strong><br><br>CPI ↑ → 降息更难"
   },
 
@@ -763,10 +756,10 @@ const indicatorInfo = {
     title: "🔥 核心 CPI",
     english: "Core CPI — YoY",
     what: "剔除食品和能源之后的CPI。",
-    why: "帮助判断基础通胀是否仍然顽固。",
-    high: "核心CPI持续偏高代表通胀压力仍强。",
-    low: "持续下降意味着通胀压力缓解。",
-    stocks: "核心CPI降温通常有利于成长股。",
+    why: "帮助观察基础通胀压力。",
+    high: "偏高代表通胀仍较顽固。",
+    low: "下降代表通胀压力缓解。",
+    stocks: "核心CPI降温通常对成长股比较友好。",
     remember: "💡 <strong>一句话记忆：</strong><br><br>Core CPI = 看通胀是否真的降温"
   },
 
@@ -774,18 +767,18 @@ const indicatorInfo = {
     title: "🔥 核心 PCE",
     english: "Core PCE Price Index — YoY",
     what: "剔除食品和能源后的PCE价格指数。",
-    why: "这是美联储非常重视的通胀指标。",
-    high: "持续偏高意味着控制通胀仍有压力。",
-    low: "持续下降通常意味着通胀正在改善。",
+    why: "是美联储非常重视的通胀指标。",
+    high: "持续偏高代表通胀压力仍大。",
+    low: "持续下降通常代表通胀改善。",
     stocks: "温和下降通常对美股比较友好。",
-    remember: "💡 <strong>一句话记忆：</strong><br><br>Core PCE = 美联储重要的通胀温度计"
+    remember: "💡 <strong>一句话记忆：</strong><br><br>Core PCE = 美联储重要通胀温度计"
   },
 
   unemployment: {
     title: "👷 失业率",
     english: "Unemployment Rate",
     what: "衡量劳动力中正在找工作但没有工作的人所占比例。",
-    why: "它是美国就业市场的重要指标。",
+    why: "是美国就业市场的重要指标。",
     high: "快速上升通常代表就业市场变弱。",
     low: "较低通常代表就业市场健康。",
     stocks: "快速上升可能增加衰退风险。",
@@ -796,9 +789,9 @@ const indicatorInfo = {
     title: "👷 非农就业",
     english: "Nonfarm Payrolls",
     what: "显示美国非农就业人数相比上个月增加或减少多少。",
-    why: "它是美国最重要的就业数据之一。",
+    why: "是美国最重要的就业数据之一。",
     high: "新增就业强代表经济和招聘活跃。",
-    low: "就业增长明显变弱代表经济降温。",
+    low: "就业增长变弱代表经济降温。",
     stocks: "市场通常喜欢就业不错但不过热。",
     remember: "💡 <strong>一句话记忆：</strong><br><br>非农最好是“不错但不过热”"
   },
@@ -807,10 +800,10 @@ const indicatorInfo = {
     title: "📋 初请失业金",
     english: "Initial Jobless Claims",
     what: "统计每周第一次申请失业保险的人数。",
-    why: "可以较快观察企业裁员变化。",
+    why: "能较快观察企业裁员变化。",
     high: "持续上升通常代表裁员增加。",
     low: "维持较低通常代表就业市场健康。",
-    stocks: "连续多周上升比单周变化更值得关注。",
+    stocks: "连续多周上升比单周波动更值得关注。",
     remember: "💡 <strong>一句话记忆：</strong><br><br>初请失业金持续 ↑ → 就业市场可能变弱"
   },
 
@@ -829,22 +822,22 @@ const indicatorInfo = {
     title: "🏢 服务业 ISM",
     english: "ISM Services PMI",
     what: "衡量美国服务业活动。",
-    why: "服务业在美国经济中占比很高。",
+    why: "美国经济中服务业占比很高。",
     high: "50以上通常代表扩张。",
     low: "50以下通常代表收缩。",
     stocks: "稳定扩张通常有利于企业盈利。",
     remember: "💡 <strong>一句话记忆：</strong><br><br>Services ISM > 50 = 扩张"
   },
 
-  dxy: {
-    title: "💵 美元指数 DXY",
-    english: "U.S. Dollar Index",
-    what: "衡量美元相对一篮子主要货币的强弱。",
-    why: "美元影响全球资金流动。",
-    high: "美元走强通常让全球金融条件偏紧。",
-    low: "美元走弱通常减轻部分金融压力。",
-    stocks: "美元过强可能影响美国跨国企业盈利。",
-    remember: "💡 <strong>一句话记忆：</strong><br><br>DXY ↑ → 全球资金条件偏紧"
+  broadDollar: {
+    title: "💵 广义美元指数",
+    english: "Nominal Broad U.S. Dollar Index",
+    what: "这是美联储发布的广义美元指数，衡量美元相对于美国主要贸易伙伴货币的整体强弱。它不是行情软件里常见的 DXY。",
+    why: "美元强弱会影响全球资金流动、美国出口企业、进口价格以及金融条件。",
+    high: "指数上升代表美元整体走强。美元过强可能让全球美元融资环境趋紧。",
+    low: "指数下降代表美元整体走弱，通常会减轻部分全球金融压力。",
+    stocks: "美元持续快速走强可能压低美国跨国企业海外收入换算后的美元价值，也可能给新兴市场和风险资产带来压力。",
+    remember: "💡 <strong>一句话记忆：</strong><br><br>Broad Dollar ↑ → 美元整体更强<br>Broad Dollar ↓ → 美元整体更弱"
   },
 
   vix: {
@@ -861,22 +854,22 @@ const indicatorInfo = {
   hySpread: {
     title: "⚠️ 高收益债利差",
     english: "ICE BofA U.S. High Yield Option-Adjusted Spread",
-    what: "衡量美国高收益公司债相对于美国国债需要额外支付多少收益率，用来补偿投资者承担更高的信用和违约风险。",
-    why: "它是观察金融市场信用压力非常重要的指标。",
-    high: "利差快速扩大通常说明企业信用风险、违约担忧或市场压力正在上升。",
-    low: "利差较低或持续收窄，通常说明投资者愿意承担风险，企业融资环境比较宽松。",
-    stocks: "如果高收益债利差快速扩大，同时VIX上升、股市下跌，通常值得警惕。",
+    what: "衡量美国高收益公司债相对美国国债额外需要多少收益率。",
+    why: "是观察信用市场压力的重要指标。",
+    high: "利差扩大通常说明信用风险或市场压力上升。",
+    low: "利差收窄通常说明风险偏好较好。",
+    stocks: "利差快速扩大同时VIX上涨时通常值得警惕。",
     remember: "💡 <strong>一句话记忆：</strong><br><br>High Yield Spread ↑ → 信用市场更害怕"
   },
 
   oil: {
     title: "🛢️ WTI 原油",
     english: "West Texas Intermediate Crude Oil",
-    what: "WTI 是美国最重要的原油价格基准之一。这里显示的是每桶原油的美元价格。",
-    why: "油价会影响汽油、运输、制造和企业成本，也是观察通胀压力的重要指标。",
-    high: "油价快速上涨可能增加能源和运输成本，并重新推高部分通胀压力。",
-    low: "油价下降通常有助于缓解能源通胀，但如果大幅下跌也可能反映市场担忧经济需求变弱。",
-    stocks: "油价上涨通常有利于能源公司，但如果上涨过快导致通胀和利率压力上升，可能对更广泛的股票市场不利。",
+    what: "美国重要的原油价格基准。",
+    why: "油价会影响运输、企业成本和通胀。",
+    high: "快速上涨可能增加能源和通胀压力。",
+    low: "下降通常缓解能源通胀。",
+    stocks: "上涨通常有利于能源股，但过快上涨可能增加整体市场压力。",
     remember: "💡 <strong>一句话记忆：</strong><br><br>WTI ↑ → 能源成本和通胀压力可能 ↑"
   },
 
@@ -885,9 +878,9 @@ const indicatorInfo = {
     english: "Gold",
     what: "全球重要的贵金属和储备资产。",
     why: "受到实际利率、美元和避险需求影响。",
-    high: "上涨可能反映避险需求或其他宏观变化。",
-    low: "走弱可能与实际利率或美元走强有关。",
-    stocks: "黄金不能直接预测股市。",
+    high: "上涨可能反映避险需求增强。",
+    low: "走弱可能与美元或实际利率走强有关。",
+    stocks: "黄金不能单独预测股市。",
     remember: "💡 <strong>一句话记忆：</strong><br><br>黄金要结合美元和实际利率看"
   },
 
@@ -897,7 +890,7 @@ const indicatorInfo = {
     what: "当前价格相对于未来预期盈利的估值。",
     why: "是判断美股估值的重要指标。",
     high: "估值越高，对利率和盈利变化越敏感。",
-    low: "较低意味着估值相对便宜。",
+    low: "较低通常代表估值相对便宜。",
     stocks: "高估值遇到利率上升容易出现估值压缩。",
     remember: "💡 <strong>一句话记忆：</strong><br><br>高 PE + 利率 ↑ = 注意估值压力"
   },
@@ -906,9 +899,9 @@ const indicatorInfo = {
     title: "💰 预期每股收益 EPS",
     english: "Forward Earnings Per Share",
     what: "分析师预计企业未来每股能赚多少钱。",
-    why: "长期股票价格需要盈利支持。",
+    why: "长期股价需要盈利支持。",
     high: "持续上升代表盈利预期改善。",
-    low: "持续下降代表盈利前景变差。",
+    low: "持续下降代表盈利前景变弱。",
     stocks: "股价和EPS一起增长通常更加健康。",
     remember: "💡 <strong>一句话记忆：</strong><br><br>股价长期最终要靠 Earnings 支撑"
   }
@@ -982,7 +975,8 @@ async function loadMarketData() {
       !data.payrolls ||
       !data.claims ||
       !data.hySpread ||
-      !data.wti
+      !data.wti ||
+      !data.broadDollar
     ) {
       throw new Error("缺少市场数据");
     }
@@ -1003,6 +997,7 @@ async function loadMarketData() {
 
     const hySpread = Number(data.hySpread.value);
     const wti = Number(data.wti.value);
+    const broadDollar = Number(data.broadDollar.value);
 
 
     document.getElementById("fedRateValue").textContent =
@@ -1034,21 +1029,16 @@ async function loadMarketData() {
 
 
     const spread = t10 - t2;
-
-    const spreadPrefix =
-      spread > 0 ? "+" : "";
+    const spreadPrefix = spread > 0 ? "+" : "";
 
     document.getElementById("spread210Value").textContent =
       spreadPrefix + spread.toFixed(2) + "%";
 
 
     if (data.treasury2.date === data.treasury10.date) {
-
       document.getElementById("spread210Date").textContent =
         "计算日期：" + data.treasury10.date;
-
     } else {
-
       document.getElementById("spread210Date").textContent =
         "根据最新2Y / 10Y数据计算";
     }
@@ -1082,8 +1072,7 @@ async function loadMarketData() {
       "数据月份：" + data.unemployment.date;
 
 
-    const payrollPrefix =
-      payrolls > 0 ? "+" : "";
+    const payrollPrefix = payrolls > 0 ? "+" : "";
 
     document.getElementById("payrollsValue").textContent =
       payrollPrefix +
@@ -1091,17 +1080,14 @@ async function loadMarketData() {
       "K";
 
     document.getElementById("payrollsDate").textContent =
-      "月度变化｜数据月份：" +
-      data.payrolls.date;
+      "月度变化｜数据月份：" + data.payrolls.date;
 
 
     document.getElementById("claimsValue").textContent =
-      Math.round(claims / 1000).toLocaleString() +
-      "K";
+      Math.round(claims / 1000).toLocaleString() + "K";
 
     document.getElementById("claimsDate").textContent =
-      "每周初请｜数据日期：" +
-      data.claims.date;
+      "每周初请｜数据日期：" + data.claims.date;
 
 
     document.getElementById("hySpreadValue").textContent =
@@ -1116,6 +1102,13 @@ async function loadMarketData() {
 
     document.getElementById("wtiDate").textContent =
       "美元/桶｜数据日期：" + data.wti.date;
+
+
+    document.getElementById("broadDollarValue").textContent =
+      broadDollar.toFixed(2);
+
+    document.getElementById("broadDollarDate").textContent =
+      "指数｜数据日期：" + data.broadDollar.date;
 
 
     document.getElementById("liveNote").style.display =
@@ -1148,7 +1141,8 @@ async function loadMarketData() {
       "payrollsValue",
       "claimsValue",
       "hySpreadValue",
-      "wtiValue"
+      "wtiValue",
+      "broadDollarValue"
     ];
 
 
@@ -1170,7 +1164,8 @@ async function loadMarketData() {
       "payrollsDate",
       "claimsDate",
       "hySpreadDate",
-      "wtiDate"
+      "wtiDate",
+      "broadDollarDate"
     ];
 
 
