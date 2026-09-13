@@ -1,0 +1,82 @@
+name: Update Market Data
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "15 14 * * 1-5"
+
+permissions:
+  contents: write
+
+jobs:
+  update-data:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Fetch latest 10Y Treasury data
+        env:
+          FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
+        run: |
+          python - <<'PY'
+          import json
+          import os
+          import urllib.parse
+          import urllib.request
+
+          api_key = os.environ["FRED_API_KEY"]
+
+          params = {
+              "series_id": "DGS10",
+              "api_key": api_key,
+              "file_type": "json",
+              "sort_order": "desc",
+              "limit": 10
+          }
+
+          url = (
+              "https://api.stlouisfed.org/fred/series/observations?"
+              + urllib.parse.urlencode(params)
+          )
+
+          with urllib.request.urlopen(url) as response:
+              fred_data = json.load(response)
+
+          latest = None
+
+          for observation in fred_data["observations"]:
+              if observation["value"] != ".":
+                  latest = observation
+                  break
+
+          if latest is None:
+              raise RuntimeError("No valid DGS10 observation found.")
+
+          output = {
+              "treasury10": {
+                  "value": float(latest["value"]),
+                  "date": latest["date"]
+              }
+          }
+
+          with open("data.json", "w", encoding="utf-8") as f:
+              json.dump(output, f, ensure_ascii=False, indent=2)
+
+          print(output)
+          PY
+
+      - name: Commit updated data
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add data.json
+
+          if git diff --cached --quiet; then
+            echo "No changes to commit."
+          else
+            git commit -m "Update market data"
+            git push
+          fi
