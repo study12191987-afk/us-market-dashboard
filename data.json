@@ -1,4 +1,8 @@
 {
+  "fedRate": {
+    "value": 3.63,
+    "date": "2026-09-10"
+  },
   "treasury2": {
     "value": 4.56,
     "date": "2026-09-10"
