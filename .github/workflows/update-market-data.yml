@@ -185,6 +185,15 @@ jobs:
 
 
           # -------------------------
+          # 市场风险 Market Risk
+          # -------------------------
+
+          hy_spread = get_latest_fred_value(
+              "BAMLH0A0HYM2"
+          )
+
+
+          # -------------------------
           # 输出 data.json
           # -------------------------
 
@@ -200,7 +209,9 @@ jobs:
 
               "unemployment": unemployment,
               "payrolls": payrolls,
-              "claims": claims
+              "claims": claims,
+
+              "hySpread": hy_spread
           }
 
 
