@@ -333,12 +333,12 @@
   </div>
 
   <div class="demo-note">
-    ⚠️ 目前利率区和通胀区使用真实数据。
+    ⚠️ 目前利率、通胀，以及经济区的失业率、非农就业、初请失业金使用真实数据。
     其他数字暂时仍为演示数据。
   </div>
 
   <div id="liveNote" class="live-note">
-    ✅ 利率与通胀真实数据读取成功。
+    ✅ 利率、通胀与经济真实数据读取成功。
   </div>
 
   <div class="market-top">
@@ -514,7 +514,11 @@
         失业率
         <span class="info-icon">i</span>
       </div>
-      <div class="value">4.2%</div>
+
+      <div class="value">
+        <span id="unemploymentValue">读取中...</span>
+        <span id="unemploymentDate" class="data-date"></span>
+      </div>
     </div>
 
     <div class="row">
@@ -522,7 +526,11 @@
         非农就业
         <span class="info-icon">i</span>
       </div>
-      <div class="value">+165K</div>
+
+      <div class="value">
+        <span id="payrollsValue">读取中...</span>
+        <span id="payrollsDate" class="data-date"></span>
+      </div>
     </div>
 
     <div class="row">
@@ -530,7 +538,11 @@
         初请失业金
         <span class="info-icon">i</span>
       </div>
-      <div class="value">235K</div>
+
+      <div class="value">
+        <span id="claimsValue">读取中...</span>
+        <span id="claimsDate" class="data-date"></span>
+      </div>
     </div>
 
     <div class="row">
@@ -764,34 +776,34 @@ const indicatorInfo = {
   unemployment: {
     title: "👷 失业率",
     english: "Unemployment Rate",
-    what: "衡量劳动力中正在找工作但暂时没有工作的人所占比例。",
-    why: "它是判断就业市场和经济健康程度的重要指标。",
-    high: "失业率快速上升通常意味着经济和就业市场正在明显变弱。",
-    low: "失业率很低通常说明就业市场强劲，但太紧也可能带来工资和通胀压力。",
-    stocks: "适度上升可能有利于降息预期；快速上升则可能让市场担心衰退。",
-    remember: "💡 <strong>一句话记忆：</strong><br><br>失业率小幅升 ≠ 一定坏<br>失业率快速升 → 要小心经济衰退"
+    what: "衡量美国劳动力中正在找工作但暂时没有工作的人所占比例。",
+    why: "它是判断美国就业市场和经济健康程度的重要指标。",
+    high: "失业率持续或快速上升，通常说明就业市场正在明显变弱。",
+    low: "失业率较低通常说明就业市场健康，但就业过热也可能增加工资和通胀压力。",
+    stocks: "适度上升有时会增加降息预期，但如果失业率快速上升，则可能引起经济衰退担忧。",
+    remember: "💡 <strong>一句话记忆：</strong><br><br>失业率小幅升 ≠ 一定坏<br>快速持续上升 → 要注意经济风险"
   },
 
   payrolls: {
     title: "👷 非农就业",
     english: "Nonfarm Payrolls",
-    what: "统计美国除农业等少数行业之外，每个月新增或减少的就业人数。",
-    why: "它是最重要的美国就业数据之一，经常造成股票、债券和美元大幅波动。",
-    high: "新增就业非常强，代表经济强，但也可能让市场担心通胀和高利率。",
-    low: "就业明显变弱说明经济正在降温；如果太弱，则可能引发衰退担忧。",
-    stocks: "市场通常喜欢“就业不错但不过热”的状态。太强和太弱都可能造成波动。",
-    remember: "💡 <strong>一句话记忆：</strong><br><br>非农最好不是越高越好，而是“刚刚好”"
+    what: "这里显示美国非农就业总人数相比上个月增加或减少了多少，单位是千人 K。",
+    why: "非农就业是美国最重要的就业数据之一，经常明显影响美股、美债和美元。",
+    high: "新增就业很强说明经济和企业招聘活跃，但太强也可能让市场担心利率维持高位。",
+    low: "就业增长明显放缓代表经济正在降温，如果持续负增长，则需要留意衰退风险。",
+    stocks: "市场通常喜欢就业保持增长但不过热。过强可能增加利率压力，过弱则可能增加衰退担忧。",
+    remember: "💡 <strong>一句话记忆：</strong><br><br>非农不是越高越好<br>市场通常喜欢“不错但不过热”"
   },
 
   claims: {
     title: "📋 初请失业金",
     english: "Initial Jobless Claims",
-    what: "每周第一次申请失业救济的人数。",
-    why: "它每周公布，因此可以比很多月度数据更快发现就业市场变化。",
-    high: "申请人数持续增加，通常说明企业裁员正在变多。",
-    low: "申请人数维持较低水平，通常说明就业市场仍然比较健康。",
-    stocks: "如果初请失业金连续数周明显上升，需要留意经济是否正在加速放缓。",
-    remember: "💡 <strong>一句话记忆：</strong><br><br>初请失业金连续 ↑ → 就业市场可能变弱"
+    what: "统计每周第一次申请失业保险救济的人数。",
+    why: "它每周公布，所以比月度就业数据更及时，可以帮助观察企业裁员是否正在增加。",
+    high: "申请人数持续上升通常说明裁员增加，就业市场正在变弱。",
+    low: "申请人数维持较低水平，通常说明企业裁员不多，就业市场仍然健康。",
+    stocks: "偶尔一周上升并不重要，更值得观察的是连续数周明显上升的趋势。",
+    remember: "💡 <strong>一句话记忆：</strong><br><br>初请失业金持续 ↑ → 就业市场可能正在变弱"
   },
 
   ismMfg: {
@@ -799,7 +811,7 @@ const indicatorInfo = {
     english: "ISM Manufacturing PMI",
     what: "调查美国制造业企业，判断订单、生产、就业等活动是在扩张还是收缩。",
     why: "它是重要的经济领先指标之一。",
-    high: "通常50以上代表制造业扩张，数值越高通常代表活动越强。",
+    high: "通常50以上代表制造业扩张。",
     low: "通常50以下代表制造业收缩。",
     stocks: "持续改善通常有利于周期股和工业股；持续恶化则可能预示经济放缓。",
     remember: "💡 <strong>一句话记忆：</strong><br><br>ISM > 50 = 扩张<br>ISM < 50 = 收缩"
@@ -808,22 +820,22 @@ const indicatorInfo = {
   ismServices: {
     title: "🏢 服务业 ISM",
     english: "ISM Services PMI",
-    what: "反映美国服务业企业活动状况。美国经济中服务业占比很高。",
-    why: "它能够帮助判断美国整体经济是否仍然保持增长。",
+    what: "反映美国服务业企业活动状况。",
+    why: "美国经济中服务业占比很高，因此它是重要的经济指标。",
     high: "高于50通常代表服务业扩张。",
     low: "低于50通常代表服务业收缩。",
-    stocks: "服务业稳定扩张通常有利于企业盈利，但如果价格分项过热，也可能重新引起通胀担忧。",
-    remember: "💡 <strong>一句话记忆：</strong><br><br>美国是服务业经济，所以服务业 ISM 很重要"
+    stocks: "稳定扩张通常有利于企业盈利，但过热也可能增加通胀压力。",
+    remember: "💡 <strong>一句话记忆：</strong><br><br>服务业 ISM > 50 通常代表扩张"
   },
 
   dxy: {
     title: "💵 美元指数 DXY",
     english: "U.S. Dollar Index",
     what: "衡量美元相对于一篮子主要货币的强弱。",
-    why: "美元是全球最重要的储备货币，因此美元强弱会影响全球资金流动。",
+    why: "美元强弱会影响全球资金流动。",
     high: "美元快速走强通常代表全球金融条件趋紧。",
     low: "美元走弱通常会减轻部分全球资产的金融压力。",
-    stocks: "美元过强可能压制美国跨国公司的海外收入换算，也可能对新兴市场和大宗商品形成压力。",
+    stocks: "美元过强可能压制美国跨国公司的海外收入换算。",
     remember: "💡 <strong>一句话记忆：</strong><br><br>DXY ↑ → 全球资金环境通常更紧"
   },
 
@@ -832,31 +844,31 @@ const indicatorInfo = {
     english: "CBOE Volatility Index",
     what: "通过标普500期权价格计算出的市场预期波动率。",
     why: "它经常被称为华尔街恐慌指数。",
-    high: "VIX快速上升意味着投资者对未来市场波动和风险的担忧增加。",
-    low: "VIX较低通常意味着市场情绪比较平静。",
-    stocks: "VIX暴涨往往和股市急跌同时出现，但极高的VIX有时也意味着恐慌已经非常严重。",
-    remember: "💡 <strong>一句话记忆：</strong><br><br>VIX ↑ → 市场更害怕<br>VIX ↓ → 市场更平静"
+    high: "VIX快速上升意味着投资者对未来市场风险的担忧增加。",
+    low: "VIX较低通常意味着市场比较平静。",
+    stocks: "VIX暴涨往往和股市急跌同时出现。",
+    remember: "💡 <strong>一句话记忆：</strong><br><br>VIX ↑ → 市场更害怕"
   },
 
   hySpread: {
     title: "⚠️ 高收益债利差",
     english: "High Yield Credit Spread",
-    what: "高风险公司债收益率相对于美国国债收益率多出来的部分。",
-    why: "它反映债券市场对企业违约风险和金融压力的担忧程度。",
-    high: "利差快速扩大，说明投资者越来越担心企业信用风险。",
-    low: "利差较低通常代表市场风险偏好较好。",
-    stocks: "如果股市下跌、VIX上涨，同时高收益债利差快速扩大，通常是更值得警惕的风险信号。",
+    what: "高风险公司债相对于美国国债多出来的收益率。",
+    why: "它反映债券市场对企业违约风险的担忧。",
+    high: "利差快速扩大说明信用风险担忧增加。",
+    low: "利差较低通常代表风险偏好较好。",
+    stocks: "如果股市下跌同时信用利差快速扩大，需要提高警惕。",
     remember: "💡 <strong>一句话记忆：</strong><br><br>信用利差 ↑ → 债券市场开始害怕"
   },
 
   oil: {
     title: "🛢️ WTI 原油",
     english: "West Texas Intermediate Crude Oil",
-    what: "美国最重要的原油价格基准之一。",
-    why: "原油价格会影响汽油、运输、生产成本以及整体通胀。",
-    high: "油价快速上涨可能推高通胀和企业成本。",
-    low: "油价下降通常有助于缓解通胀，但如果暴跌也可能代表经济需求非常弱。",
-    stocks: "油价上涨通常有利于能源股，但如果上涨太快，也可能增加整个市场的通胀和利率压力。",
+    what: "美国重要的原油价格基准。",
+    why: "油价会影响汽油、运输、企业成本和通胀。",
+    high: "油价快速上涨可能推高通胀。",
+    low: "油价下降有助于缓解通胀，但暴跌也可能代表需求很弱。",
+    stocks: "上涨通常有利于能源股，但过快上涨会增加整体市场通胀压力。",
     remember: "💡 <strong>一句话记忆：</strong><br><br>油价 ↑ → 通胀压力可能 ↑"
   },
 
@@ -864,32 +876,32 @@ const indicatorInfo = {
     title: "🥇 黄金",
     english: "Gold",
     what: "全球重要的贵金属和储备资产。",
-    why: "黄金常受到实际利率、美元、通胀预期、央行购买和避险需求影响。",
-    high: "黄金持续上涨可能代表避险需求增加，也可能与美元、实际利率或央行买盘有关。",
-    low: "黄金走弱可能代表避险需求下降，或者实际利率和美元较强。",
-    stocks: "黄金不能直接判断股票涨跌，但可以帮助观察市场对通胀、美元和风险的态度。",
-    remember: "💡 <strong>一句话记忆：</strong><br><br>黄金不是单纯的“恐慌指标”，要结合美元和实际利率一起看"
+    why: "黄金受到实际利率、美元、央行购买和避险需求等因素影响。",
+    high: "持续上涨可能反映避险需求或其他宏观因素变化。",
+    low: "走弱可能与实际利率或美元走强有关。",
+    stocks: "黄金不能直接预测股市涨跌。",
+    remember: "💡 <strong>一句话记忆：</strong><br><br>黄金要结合美元和实际利率一起看"
   },
 
   forwardPe: {
     title: "📊 标普500预期市盈率",
     english: "S&P 500 Forward P/E",
-    what: "用标普500当前价格除以未来一年市场预计的企业盈利。",
-    why: "它是判断美股整体估值贵不贵的重要指标之一。",
-    high: "预期市盈率越高，说明投资者愿意为未来盈利支付更高价格。",
-    low: "较低估值通常意味着价格相对于盈利更便宜，但也可能是因为市场预期经济恶化。",
-    stocks: "估值很高时，如果利率突然上升或盈利下降，市场容易出现估值压缩。",
-    remember: "💡 <strong>一句话记忆：</strong><br><br>PE ↑ 不一定危险<br>但 PE 很高 + 利率 ↑ + EPS ↓ = 要小心"
+    what: "用标普500价格除以未来一年市场预计的盈利。",
+    why: "它是判断美股整体估值的重要指标。",
+    high: "较高说明投资者愿意为未来盈利支付更高价格。",
+    low: "较低代表估值更便宜，但也可能因为盈利预期较差。",
+    stocks: "高估值遇到利率上升或盈利下降时容易出现估值压缩。",
+    remember: "💡 <strong>一句话记忆：</strong><br><br>高 PE + 利率 ↑ + EPS ↓ = 要小心"
   },
 
   forwardEps: {
     title: "💰 预期每股收益 EPS",
     english: "Forward Earnings Per Share",
     what: "分析师预计企业未来可以赚多少钱，并按每股计算。",
-    why: "长期来看，股票价格最终需要企业盈利支持。",
-    high: "如果预期EPS持续上升，通常说明市场预计企业盈利正在改善。",
-    low: "如果EPS预期持续下调，说明企业盈利前景正在变差。",
-    stocks: "最理想的情况通常是股价上涨，同时EPS也上涨；如果股价暴涨但EPS几乎不增长，估值风险会越来越高。",
+    why: "长期来看股票价格需要企业盈利支持。",
+    high: "EPS预期持续上升通常代表企业盈利改善。",
+    low: "持续下调说明盈利前景变差。",
+    stocks: "股价和EPS一起增长通常比只涨股价更加健康。",
     remember: "💡 <strong>一句话记忆：</strong><br><br>股价长期最终要靠 Earnings 支撑"
   }
 
@@ -899,9 +911,7 @@ const indicatorInfo = {
 function openInfo(type) {
   const data = indicatorInfo[type];
 
-  if (!data) {
-    return;
-  }
+  if (!data) return;
 
   document.getElementById("modalTitle").innerHTML = data.title;
   document.getElementById("modalEnglish").innerHTML = data.english;
@@ -939,62 +949,6 @@ document.addEventListener("keydown", function(event) {
 
 async function loadMarketData() {
 
-  const fedRateValue =
-    document.getElementById("fedRateValue");
-
-  const fedRateDate =
-    document.getElementById("fedRateDate");
-
-
-  const treasury2Value =
-    document.getElementById("treasury2Value");
-
-  const treasury2Date =
-    document.getElementById("treasury2Date");
-
-
-  const treasury10Value =
-    document.getElementById("treasury10Value");
-
-  const treasury10Date =
-    document.getElementById("treasury10Date");
-
-
-  const spreadValue =
-    document.getElementById("spread210Value");
-
-  const spreadDate =
-    document.getElementById("spread210Date");
-
-
-  const realYield10Value =
-    document.getElementById("realYield10Value");
-
-  const realYield10Date =
-    document.getElementById("realYield10Date");
-
-
-  const cpiValue =
-    document.getElementById("cpiValue");
-
-  const cpiDate =
-    document.getElementById("cpiDate");
-
-
-  const coreCpiValue =
-    document.getElementById("coreCpiValue");
-
-  const coreCpiDate =
-    document.getElementById("coreCpiDate");
-
-
-  const corePceValue =
-    document.getElementById("corePceValue");
-
-  const corePceDate =
-    document.getElementById("corePceDate");
-
-
   try {
 
     const response = await fetch(
@@ -1015,118 +969,130 @@ async function loadMarketData() {
       !data.realYield10 ||
       !data.cpi ||
       !data.coreCpi ||
-      !data.corePce
+      !data.corePce ||
+      !data.unemployment ||
+      !data.payrolls ||
+      !data.claims
     ) {
       throw new Error("缺少市场数据");
     }
 
 
-    const fedRate =
-      Number(data.fedRate.value);
+    const fedRate = Number(data.fedRate.value);
+    const t2 = Number(data.treasury2.value);
+    const t10 = Number(data.treasury10.value);
+    const realYield10 = Number(data.realYield10.value);
 
-    const t2 =
-      Number(data.treasury2.value);
+    const cpi = Number(data.cpi.value);
+    const coreCpi = Number(data.coreCpi.value);
+    const corePce = Number(data.corePce.value);
 
-    const t10 =
-      Number(data.treasury10.value);
-
-    const realYield10 =
-      Number(data.realYield10.value);
-
-    const cpi =
-      Number(data.cpi.value);
-
-    const coreCpi =
-      Number(data.coreCpi.value);
-
-    const corePce =
-      Number(data.corePce.value);
+    const unemployment = Number(data.unemployment.value);
+    const payrolls = Number(data.payrolls.value);
+    const claims = Number(data.claims.value);
 
 
-    fedRateValue.textContent =
+    document.getElementById("fedRateValue").textContent =
       fedRate.toFixed(2) + "%";
 
-    fedRateDate.textContent =
+    document.getElementById("fedRateDate").textContent =
       "数据日期：" + data.fedRate.date;
 
 
-    treasury2Value.textContent =
+    document.getElementById("treasury2Value").textContent =
       t2.toFixed(2) + "%";
 
-    treasury2Date.textContent =
+    document.getElementById("treasury2Date").textContent =
       "数据日期：" + data.treasury2.date;
 
 
-    treasury10Value.textContent =
+    document.getElementById("treasury10Value").textContent =
       t10.toFixed(2) + "%";
 
-    treasury10Date.textContent =
+    document.getElementById("treasury10Date").textContent =
       "数据日期：" + data.treasury10.date;
 
 
-    realYield10Value.textContent =
+    document.getElementById("realYield10Value").textContent =
       realYield10.toFixed(2) + "%";
 
-    realYield10Date.textContent =
+    document.getElementById("realYield10Date").textContent =
       "数据日期：" + data.realYield10.date;
 
 
-    const spread =
-      t10 - t2;
+    const spread = t10 - t2;
 
     const spreadPrefix =
       spread > 0 ? "+" : "";
 
-    spreadValue.textContent =
-      spreadPrefix +
-      spread.toFixed(2) +
-      "%";
+    document.getElementById("spread210Value").textContent =
+      spreadPrefix + spread.toFixed(2) + "%";
 
 
-    if (
-      data.treasury2.date ===
-      data.treasury10.date
-    ) {
+    if (data.treasury2.date === data.treasury10.date) {
 
-      spreadDate.textContent =
-        "计算日期：" +
-        data.treasury10.date;
+      document.getElementById("spread210Date").textContent =
+        "计算日期：" + data.treasury10.date;
 
     } else {
 
-      spreadDate.textContent =
+      document.getElementById("spread210Date").textContent =
         "根据最新2Y / 10Y数据计算";
-
     }
 
 
-    cpiValue.textContent =
+    document.getElementById("cpiValue").textContent =
       cpi.toFixed(2) + "%";
 
-    cpiDate.textContent =
-      "同比 YoY｜数据月份：" +
-      data.cpi.date;
+    document.getElementById("cpiDate").textContent =
+      "同比 YoY｜数据月份：" + data.cpi.date;
 
 
-    coreCpiValue.textContent =
+    document.getElementById("coreCpiValue").textContent =
       coreCpi.toFixed(2) + "%";
 
-    coreCpiDate.textContent =
-      "同比 YoY｜数据月份：" +
-      data.coreCpi.date;
+    document.getElementById("coreCpiDate").textContent =
+      "同比 YoY｜数据月份：" + data.coreCpi.date;
 
 
-    corePceValue.textContent =
+    document.getElementById("corePceValue").textContent =
       corePce.toFixed(2) + "%";
 
-    corePceDate.textContent =
-      "同比 YoY｜数据月份：" +
-      data.corePce.date;
+    document.getElementById("corePceDate").textContent =
+      "同比 YoY｜数据月份：" + data.corePce.date;
 
 
-    document.getElementById(
-      "liveNote"
-    ).style.display = "block";
+    document.getElementById("unemploymentValue").textContent =
+      unemployment.toFixed(1) + "%";
+
+    document.getElementById("unemploymentDate").textContent =
+      "数据月份：" + data.unemployment.date;
+
+
+    const payrollPrefix =
+      payrolls > 0 ? "+" : "";
+
+    document.getElementById("payrollsValue").textContent =
+      payrollPrefix +
+      Math.round(payrolls).toLocaleString() +
+      "K";
+
+    document.getElementById("payrollsDate").textContent =
+      "月度变化｜数据月份：" +
+      data.payrolls.date;
+
+
+    document.getElementById("claimsValue").textContent =
+      Math.round(claims / 1000).toLocaleString() +
+      "K";
+
+    document.getElementById("claimsDate").textContent =
+      "每周初请｜数据日期：" +
+      data.claims.date;
+
+
+    document.getElementById("liveNote").style.display =
+      "block";
 
 
     console.log(
@@ -1142,53 +1108,50 @@ async function loadMarketData() {
     );
 
 
-    fedRateValue.textContent =
-      "等待数据";
-
-    treasury2Value.textContent =
-      "等待数据";
-
-    treasury10Value.textContent =
-      "等待数据";
-
-    spreadValue.textContent =
-      "等待数据";
-
-    realYield10Value.textContent =
-      "等待数据";
-
-    cpiValue.textContent =
-      "等待数据";
-
-    coreCpiValue.textContent =
-      "等待数据";
-
-    corePceValue.textContent =
-      "等待数据";
+    const valueIds = [
+      "fedRateValue",
+      "treasury2Value",
+      "treasury10Value",
+      "spread210Value",
+      "realYield10Value",
+      "cpiValue",
+      "coreCpiValue",
+      "corePceValue",
+      "unemploymentValue",
+      "payrollsValue",
+      "claimsValue"
+    ];
 
 
-    fedRateDate.textContent =
-      "请使用 GitHub Pages 查看";
+    valueIds.forEach(function(id) {
+      document.getElementById(id).textContent =
+        "等待数据";
+    });
 
-    treasury2Date.textContent =
-      "请使用 GitHub Pages 查看";
 
-    treasury10Date.textContent =
-      "请使用 GitHub Pages 查看";
+    const dateIds = [
+      "fedRateDate",
+      "treasury2Date",
+      "treasury10Date",
+      "realYield10Date",
+      "cpiDate",
+      "coreCpiDate",
+      "corePceDate",
+      "unemploymentDate",
+      "payrollsDate",
+      "claimsDate"
+    ];
 
-    realYield10Date.textContent =
-      "请使用 GitHub Pages 查看";
 
-    cpiDate.textContent =
-      "请使用 GitHub Pages 查看";
+    dateIds.forEach(function(id) {
+      document.getElementById(id).textContent =
+        "请使用 GitHub Pages 查看";
+    });
 
-    coreCpiDate.textContent =
-      "请使用 GitHub Pages 查看";
 
-    corePceDate.textContent =
-      "请使用 GitHub Pages 查看";
-
-    spreadDate.textContent = "";
+    document.getElementById(
+      "spread210Date"
+    ).textContent = "";
   }
 
 }
