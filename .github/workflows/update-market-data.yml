@@ -57,20 +57,17 @@ jobs:
               )
 
 
-          # 2年期美国国债
-          treasury2 = get_latest_fred_value("DGS2")
-
-          # 10年期美国国债
-          treasury10 = get_latest_fred_value("DGS10")
-
-          # 有效联邦基金利率
           fed_rate = get_latest_fred_value("DFF")
+          treasury2 = get_latest_fred_value("DGS2")
+          treasury10 = get_latest_fred_value("DGS10")
+          real_yield10 = get_latest_fred_value("DFII10")
 
 
           output = {
               "fedRate": fed_rate,
               "treasury2": treasury2,
-              "treasury10": treasury10
+              "treasury10": treasury10,
+              "realYield10": real_yield10
           }
 
 
