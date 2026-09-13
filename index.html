@@ -333,7 +333,7 @@
   </div>
 
   <div class="demo-note">
-    ⚠️ 目前利率、通胀、部分经济数据，以及高收益债利差使用真实数据。
+    ⚠️ 目前利率、通胀、部分经济数据、高收益债利差和 WTI 原油使用真实数据。
     其他数字暂时仍为演示数据。
   </div>
 
@@ -602,7 +602,11 @@
         WTI 原油
         <span class="info-icon">i</span>
       </div>
-      <div class="value">$68.20</div>
+
+      <div class="value">
+        <span id="wtiValue">读取中...</span>
+        <span id="wtiDate" class="data-date"></span>
+      </div>
     </div>
 
     <div class="row">
@@ -858,22 +862,22 @@ const indicatorInfo = {
     title: "⚠️ 高收益债利差",
     english: "ICE BofA U.S. High Yield Option-Adjusted Spread",
     what: "衡量美国高收益公司债相对于美国国债需要额外支付多少收益率，用来补偿投资者承担更高的信用和违约风险。",
-    why: "它是观察金融市场信用压力非常重要的指标。有时股票市场看起来还很平静，但信用市场已经先开始紧张。",
-    high: "利差快速扩大意味着投资者要求更高的风险补偿，通常说明企业信用风险、违约担忧或市场压力正在上升。",
+    why: "它是观察金融市场信用压力非常重要的指标。",
+    high: "利差快速扩大通常说明企业信用风险、违约担忧或市场压力正在上升。",
     low: "利差较低或持续收窄，通常说明投资者愿意承担风险，企业融资环境比较宽松。",
-    stocks: "如果高收益债利差快速扩大，同时VIX上升、股市下跌，通常是比较值得警惕的风险组合。",
-    remember: "💡 <strong>一句话记忆：</strong><br><br>High Yield Spread ↑ → 信用市场更害怕<br>High Yield Spread ↓ → 风险偏好通常更好"
+    stocks: "如果高收益债利差快速扩大，同时VIX上升、股市下跌，通常值得警惕。",
+    remember: "💡 <strong>一句话记忆：</strong><br><br>High Yield Spread ↑ → 信用市场更害怕"
   },
 
   oil: {
     title: "🛢️ WTI 原油",
     english: "West Texas Intermediate Crude Oil",
-    what: "美国重要的原油价格基准。",
-    why: "油价会影响企业成本和通胀。",
-    high: "快速上涨可能推高通胀。",
-    low: "下降通常缓解通胀压力。",
-    stocks: "上涨通常有利于能源股，但太快上涨会增加通胀压力。",
-    remember: "💡 <strong>一句话记忆：</strong><br><br>油价 ↑ → 通胀压力可能 ↑"
+    what: "WTI 是美国最重要的原油价格基准之一。这里显示的是每桶原油的美元价格。",
+    why: "油价会影响汽油、运输、制造和企业成本，也是观察通胀压力的重要指标。",
+    high: "油价快速上涨可能增加能源和运输成本，并重新推高部分通胀压力。",
+    low: "油价下降通常有助于缓解能源通胀，但如果大幅下跌也可能反映市场担忧经济需求变弱。",
+    stocks: "油价上涨通常有利于能源公司，但如果上涨过快导致通胀和利率压力上升，可能对更广泛的股票市场不利。",
+    remember: "💡 <strong>一句话记忆：</strong><br><br>WTI ↑ → 能源成本和通胀压力可能 ↑"
   },
 
   gold: {
@@ -977,7 +981,8 @@ async function loadMarketData() {
       !data.unemployment ||
       !data.payrolls ||
       !data.claims ||
-      !data.hySpread
+      !data.hySpread ||
+      !data.wti
     ) {
       throw new Error("缺少市场数据");
     }
@@ -997,6 +1002,7 @@ async function loadMarketData() {
     const claims = Number(data.claims.value);
 
     const hySpread = Number(data.hySpread.value);
+    const wti = Number(data.wti.value);
 
 
     document.getElementById("fedRateValue").textContent =
@@ -1105,6 +1111,13 @@ async function loadMarketData() {
       "数据日期：" + data.hySpread.date;
 
 
+    document.getElementById("wtiValue").textContent =
+      "$" + wti.toFixed(2);
+
+    document.getElementById("wtiDate").textContent =
+      "美元/桶｜数据日期：" + data.wti.date;
+
+
     document.getElementById("liveNote").style.display =
       "block";
 
@@ -1134,7 +1147,8 @@ async function loadMarketData() {
       "unemploymentValue",
       "payrollsValue",
       "claimsValue",
-      "hySpreadValue"
+      "hySpreadValue",
+      "wtiValue"
     ];
 
 
@@ -1155,7 +1169,8 @@ async function loadMarketData() {
       "unemploymentDate",
       "payrollsDate",
       "claimsDate",
-      "hySpreadDate"
+      "hySpreadDate",
+      "wtiDate"
     ];
 
 
