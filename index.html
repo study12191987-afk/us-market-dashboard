@@ -3,13 +3,11 @@
 
 <head>
   <meta charset="UTF-8">
-
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <title>美国市场宏观仪表盘</title>
 
   <style>
-
     * {
       box-sizing: border-box;
       margin: 0;
@@ -292,7 +290,6 @@
     }
 
     @media (max-width: 650px) {
-
       body {
         padding: 12px;
       }
@@ -321,93 +318,54 @@
       .label {
         line-height: 1.5;
       }
-
     }
-
   </style>
-
 </head>
 
 <body>
 
 <div class="container">
 
-  <h1>
-    🇺🇸 美国市场宏观仪表盘
-  </h1>
+  <h1>🇺🇸 美国市场宏观仪表盘</h1>
 
   <div class="subtitle">
     US MARKET DASHBOARD
   </div>
 
   <div class="demo-note">
-    ⚠️ 目前“2年期美债、10年期美债、10Y-2Y利差”使用真实数据。
+    ⚠️ 目前“有效联邦基金利率、2年期美债、10年期美债、10Y-2Y利差”使用真实数据。
     其他数字暂时仍为演示数据。
   </div>
 
   <div id="liveNote" class="live-note">
-    ✅ 美债真实数据读取成功，并已自动计算 10Y-2Y 利差。
+    ✅ 利率真实数据读取成功。
   </div>
-
 
   <div class="market-top">
 
     <div class="top-card">
-
-      <div class="name">
-        标普 500
-      </div>
-
-      <div class="value">
-        6,500
-      </div>
-
-      <div class="up">
-        ▲ +0.62%
-      </div>
-
+      <div class="name">标普 500</div>
+      <div class="value">6,500</div>
+      <div class="up">▲ +0.62%</div>
     </div>
 
-
     <div class="top-card">
-
-      <div class="name">
-        纳斯达克
-      </div>
-
-      <div class="value">
-        21,700
-      </div>
-
-      <div class="up">
-        ▲ +0.81%
-      </div>
-
+      <div class="name">纳斯达克</div>
+      <div class="value">21,700</div>
+      <div class="up">▲ +0.81%</div>
     </div>
 
-
     <div class="top-card">
-
-      <div
-        class="name clickable"
-        onclick="openInfo('vix')"
-      >
+      <div class="name clickable" onclick="openInfo('vix')">
         恐慌指数 VIX
         <span class="info-icon">i</span>
       </div>
 
-      <div class="value">
-        15.8
-      </div>
-
-      <div class="down">
-        ▼ -2.10%
-      </div>
-
+      <div class="value">15.8</div>
+      <div class="down">▼ -2.10%</div>
     </div>
 
   </div>
-
 
   <div class="section">
 
@@ -416,38 +374,22 @@
     </div>
 
     <div class="signal-grid">
-
-      <div class="signal">
-        🟢 通胀：降温
-      </div>
-
-      <div class="signal">
-        🟢 流动性：改善
-      </div>
-
-      <div class="signal">
-        🟡 经济：放缓
-      </div>
-
-      <div class="signal">
-        🔴 利率：上升
-      </div>
-
+      <div class="signal">🟢 通胀：降温</div>
+      <div class="signal">🟢 流动性：改善</div>
+      <div class="signal">🟡 经济：放缓</div>
+      <div class="signal">🔴 利率：上升</div>
     </div>
 
     <div class="score">
-
       市场风险评分：
       <strong>68 / 100</strong>
 
       <div class="score-bar">
         <div class="score-fill"></div>
       </div>
-
     </div>
 
   </div>
-
 
   <div class="section">
 
@@ -455,111 +397,65 @@
       💰 利率 INTEREST RATES
     </div>
 
-
     <div class="row">
 
-      <div
-        class="label clickable"
-        onclick="openInfo('fedRate')"
-      >
-        联邦基金利率
+      <div class="label clickable" onclick="openInfo('fedRate')">
+        有效联邦基金利率
         <span class="info-icon">i</span>
       </div>
 
       <div class="value">
-        4.25%
+        <span id="fedRateValue">读取中...</span>
+        <span id="fedRateDate" class="data-date"></span>
       </div>
 
     </div>
 
-
     <div class="row">
 
-      <div
-        class="label clickable"
-        onclick="openInfo('treasury2')"
-      >
+      <div class="label clickable" onclick="openInfo('treasury2')">
         2年期美债
         <span class="info-icon">i</span>
       </div>
 
       <div class="value">
-
-        <span id="treasury2Value">
-          读取中...
-        </span>
-
-        <span
-          id="treasury2Date"
-          class="data-date"
-        >
-        </span>
-
+        <span id="treasury2Value">读取中...</span>
+        <span id="treasury2Date" class="data-date"></span>
       </div>
 
     </div>
 
-
     <div class="row">
 
-      <div
-        class="label clickable"
-        onclick="openInfo('treasury10')"
-      >
+      <div class="label clickable" onclick="openInfo('treasury10')">
         10年期美债
         <span class="info-icon">i</span>
       </div>
 
       <div class="value">
-
-        <span id="treasury10Value">
-          读取中...
-        </span>
-
-        <span
-          id="treasury10Date"
-          class="data-date"
-        >
-        </span>
-
+        <span id="treasury10Value">读取中...</span>
+        <span id="treasury10Date" class="data-date"></span>
       </div>
 
     </div>
 
-
     <div class="row">
 
-      <div
-        class="label clickable"
-        onclick="openInfo('spread210')"
-      >
+      <div class="label clickable" onclick="openInfo('spread210')">
         10年 - 2年利差
         <span class="info-icon">i</span>
       </div>
 
       <div class="value">
-
-        <span id="spread210Value">
-          计算中...
-        </span>
-
-        <span
-          id="spread210Date"
-          class="data-date"
-        >
-        </span>
-
+        <span id="spread210Value">计算中...</span>
+        <span id="spread210Date" class="data-date"></span>
       </div>
 
     </div>
 
-
     <div class="row">
 
-      <div
-        class="label clickable"
-        onclick="openInfo('realYield10')"
-      >
+      <div class="label clickable" onclick="openInfo('realYield10')">
         10年期实际利率
         <span class="info-icon">i</span>
       </div>
@@ -572,7 +468,6 @@
 
   </div>
 
-
   <div class="section">
 
     <div class="section-title">
@@ -580,57 +475,30 @@
     </div>
 
     <div class="row">
-
-      <div
-        class="label clickable"
-        onclick="openInfo('cpi')"
-      >
+      <div class="label clickable" onclick="openInfo('cpi')">
         消费者物价 CPI
         <span class="info-icon">i</span>
       </div>
-
-      <div class="value">
-        2.8%
-      </div>
-
+      <div class="value">2.8%</div>
     </div>
 
-
     <div class="row">
-
-      <div
-        class="label clickable"
-        onclick="openInfo('coreCpi')"
-      >
+      <div class="label clickable" onclick="openInfo('coreCpi')">
         核心 CPI
         <span class="info-icon">i</span>
       </div>
-
-      <div class="value">
-        3.1%
-      </div>
-
+      <div class="value">3.1%</div>
     </div>
 
-
     <div class="row">
-
-      <div
-        class="label clickable"
-        onclick="openInfo('corePce')"
-      >
+      <div class="label clickable" onclick="openInfo('corePce')">
         核心 PCE
         <span class="info-icon">i</span>
       </div>
-
-      <div class="value">
-        2.7%
-      </div>
-
+      <div class="value">2.7%</div>
     </div>
 
   </div>
-
 
   <div class="section">
 
@@ -639,91 +507,46 @@
     </div>
 
     <div class="row">
-
-      <div
-        class="label clickable"
-        onclick="openInfo('unemployment')"
-      >
+      <div class="label clickable" onclick="openInfo('unemployment')">
         失业率
         <span class="info-icon">i</span>
       </div>
-
-      <div class="value">
-        4.2%
-      </div>
-
+      <div class="value">4.2%</div>
     </div>
 
-
     <div class="row">
-
-      <div
-        class="label clickable"
-        onclick="openInfo('payrolls')"
-      >
+      <div class="label clickable" onclick="openInfo('payrolls')">
         非农就业
         <span class="info-icon">i</span>
       </div>
-
-      <div class="value">
-        +165K
-      </div>
-
+      <div class="value">+165K</div>
     </div>
 
-
     <div class="row">
-
-      <div
-        class="label clickable"
-        onclick="openInfo('claims')"
-      >
+      <div class="label clickable" onclick="openInfo('claims')">
         初请失业金
         <span class="info-icon">i</span>
       </div>
-
-      <div class="value">
-        235K
-      </div>
-
+      <div class="value">235K</div>
     </div>
 
-
     <div class="row">
-
-      <div
-        class="label clickable"
-        onclick="openInfo('ismMfg')"
-      >
+      <div class="label clickable" onclick="openInfo('ismMfg')">
         制造业 ISM
         <span class="info-icon">i</span>
       </div>
-
-      <div class="value">
-        49.8
-      </div>
-
+      <div class="value">49.8</div>
     </div>
 
-
     <div class="row">
-
-      <div
-        class="label clickable"
-        onclick="openInfo('ismServices')"
-      >
+      <div class="label clickable" onclick="openInfo('ismServices')">
         服务业 ISM
         <span class="info-icon">i</span>
       </div>
-
-      <div class="value">
-        52.4
-      </div>
-
+      <div class="value">52.4</div>
     </div>
 
   </div>
-
 
   <div class="section">
 
@@ -732,91 +555,46 @@
     </div>
 
     <div class="row">
-
-      <div
-        class="label clickable"
-        onclick="openInfo('dxy')"
-      >
+      <div class="label clickable" onclick="openInfo('dxy')">
         美元指数 DXY
         <span class="info-icon">i</span>
       </div>
-
-      <div class="value">
-        101.2
-      </div>
-
+      <div class="value">101.2</div>
     </div>
 
-
     <div class="row">
-
-      <div
-        class="label clickable"
-        onclick="openInfo('vix')"
-      >
+      <div class="label clickable" onclick="openInfo('vix')">
         恐慌指数 VIX
         <span class="info-icon">i</span>
       </div>
-
-      <div class="value">
-        15.8
-      </div>
-
+      <div class="value">15.8</div>
     </div>
 
-
     <div class="row">
-
-      <div
-        class="label clickable"
-        onclick="openInfo('hySpread')"
-      >
+      <div class="label clickable" onclick="openInfo('hySpread')">
         高收益债利差
         <span class="info-icon">i</span>
       </div>
-
-      <div class="value">
-        3.1%
-      </div>
-
+      <div class="value">3.1%</div>
     </div>
 
-
     <div class="row">
-
-      <div
-        class="label clickable"
-        onclick="openInfo('oil')"
-      >
+      <div class="label clickable" onclick="openInfo('oil')">
         WTI 原油
         <span class="info-icon">i</span>
       </div>
-
-      <div class="value">
-        $68.20
-      </div>
-
+      <div class="value">$68.20</div>
     </div>
 
-
     <div class="row">
-
-      <div
-        class="label clickable"
-        onclick="openInfo('gold')"
-      >
+      <div class="label clickable" onclick="openInfo('gold')">
         黄金
         <span class="info-icon">i</span>
       </div>
-
-      <div class="value">
-        $2,580
-      </div>
-
+      <div class="value">$2,580</div>
     </div>
 
   </div>
-
 
   <div class="section">
 
@@ -825,36 +603,19 @@
     </div>
 
     <div class="row">
-
-      <div
-        class="label clickable"
-        onclick="openInfo('forwardPe')"
-      >
+      <div class="label clickable" onclick="openInfo('forwardPe')">
         标普500预期市盈率
         <span class="info-icon">i</span>
       </div>
-
-      <div class="value">
-        21.5x
-      </div>
-
+      <div class="value">21.5x</div>
     </div>
 
-
     <div class="row">
-
-      <div
-        class="label clickable"
-        onclick="openInfo('forwardEps')"
-      >
+      <div class="label clickable" onclick="openInfo('forwardEps')">
         预期每股收益 EPS
         <span class="info-icon">i</span>
       </div>
-
-      <div class="value">
-        $265
-      </div>
-
+      <div class="value">$265</div>
     </div>
 
   </div>
@@ -862,32 +623,16 @@
 </div>
 
 
-<div
-  id="infoModal"
-  class="modal"
-  onclick="closeOutside(event)"
->
+<div id="infoModal" class="modal" onclick="closeOutside(event)">
 
   <div class="modal-content">
 
-    <span
-      class="close"
-      onclick="closeInfo()"
-    >
+    <span class="close" onclick="closeInfo()">
       &times;
     </span>
 
-    <div
-      id="modalTitle"
-      class="modal-title"
-    >
-    </div>
-
-    <div
-      id="modalEnglish"
-      class="modal-english"
-    >
-    </div>
+    <div id="modalTitle" class="modal-title"></div>
+    <div id="modalEnglish" class="modal-english"></div>
 
     <div class="info-block">
       <h3>📘 它是什么？</h3>
@@ -914,11 +659,7 @@
       <div id="modalStocks" class="stock-box"></div>
     </div>
 
-    <div
-      id="modalRemember"
-      class="remember-box"
-    >
-    </div>
+    <div id="modalRemember" class="remember-box"></div>
 
   </div>
 
@@ -930,14 +671,14 @@
 const indicatorInfo = {
 
   fedRate: {
-    title: "🏦 联邦基金利率",
-    english: "Federal Funds Rate",
-    what: "这是美国银行之间隔夜借贷所参考的核心短期利率，也是美联储货币政策最重要的利率之一。",
-    why: "它会影响银行贷款、信用卡、企业融资、房贷以及整个金融市场的资金成本。",
-    high: "利率较高通常代表货币政策偏紧，借钱成本增加，经济活动可能受到压制。",
-    low: "利率较低通常代表货币政策更宽松，借钱成本下降，有利于刺激经济和投资。",
-    stocks: "降息通常对成长股和科技股估值较友好；加息通常会增加股票估值压力。但也要判断降息是不是因为经济已经明显恶化。",
-    remember: "💡 <strong>一句话记忆：</strong><br><br>Fed Rate ↑ → 钱更贵<br>Fed Rate ↓ → 钱更便宜"
+    title: "🏦 有效联邦基金利率",
+    english: "Effective Federal Funds Rate",
+    what: "这是美国银行之间隔夜联邦基金交易实际形成的有效利率。它通常会围绕美联储设定的联邦基金目标区间运行。",
+    why: "它能直接反映美联储货币政策在短期资金市场中的实际效果，并影响整个金融体系的资金成本。",
+    high: "有效联邦基金利率较高，通常代表货币政策偏紧，借贷成本较高。",
+    low: "有效联邦基金利率较低，通常代表货币政策更加宽松，资金成本下降。",
+    stocks: "利率下降通常有利于成长股和高估值股票，但如果下降是因为经济明显恶化，则需要结合就业和信用市场一起判断。",
+    remember: "💡 <strong>一句话记忆：</strong><br><br>Fed Funds Rate ↑ → 钱更贵<br>Fed Funds Rate ↓ → 钱更便宜"
   },
 
   treasury2: {
@@ -1153,7 +894,6 @@ const indicatorInfo = {
 
 
 function openInfo(type) {
-
   const data = indicatorInfo[type];
 
   if (!data) {
@@ -1171,58 +911,42 @@ function openInfo(type) {
 
   document.getElementById("infoModal").style.display = "block";
   document.body.style.overflow = "hidden";
-
 }
 
 
 function closeInfo() {
-
   document.getElementById("infoModal").style.display = "none";
   document.body.style.overflow = "auto";
-
 }
 
 
 function closeOutside(event) {
-
   if (event.target.id === "infoModal") {
     closeInfo();
   }
-
 }
 
 
-document.addEventListener(
-  "keydown",
-  function(event) {
-
-    if (event.key === "Escape") {
-      closeInfo();
-    }
-
+document.addEventListener("keydown", function(event) {
+  if (event.key === "Escape") {
+    closeInfo();
   }
-);
+});
 
 
 async function loadMarketData() {
 
-  const treasury2Value =
-    document.getElementById("treasury2Value");
+  const fedRateValue = document.getElementById("fedRateValue");
+  const fedRateDate = document.getElementById("fedRateDate");
 
-  const treasury2Date =
-    document.getElementById("treasury2Date");
+  const treasury2Value = document.getElementById("treasury2Value");
+  const treasury2Date = document.getElementById("treasury2Date");
 
-  const treasury10Value =
-    document.getElementById("treasury10Value");
+  const treasury10Value = document.getElementById("treasury10Value");
+  const treasury10Date = document.getElementById("treasury10Date");
 
-  const treasury10Date =
-    document.getElementById("treasury10Date");
-
-  const spreadValue =
-    document.getElementById("spread210Value");
-
-  const spreadDate =
-    document.getElementById("spread210Date");
+  const spreadValue = document.getElementById("spread210Value");
+  const spreadDate = document.getElementById("spread210Date");
 
 
   try {
@@ -1231,52 +955,51 @@ async function loadMarketData() {
       "data.json?t=" + new Date().getTime()
     );
 
-
     if (!response.ok) {
       throw new Error("无法读取 data.json");
     }
 
-
-    const data =
-      await response.json();
-
+    const data = await response.json();
 
     if (
+      !data.fedRate ||
       !data.treasury2 ||
       !data.treasury10
     ) {
-      throw new Error("缺少美债数据");
+      throw new Error("缺少利率数据");
     }
 
 
-    const t2 =
-      Number(data.treasury2.value);
+    const fedRate = Number(data.fedRate.value);
+    const t2 = Number(data.treasury2.value);
+    const t10 = Number(data.treasury10.value);
 
-    const t10 =
-      Number(data.treasury10.value);
+
+    fedRateValue.textContent =
+      fedRate.toFixed(2) + "%";
+
+    fedRateDate.textContent =
+      "数据日期：" + data.fedRate.date;
 
 
     treasury2Value.textContent =
       t2.toFixed(2) + "%";
 
-    treasury10Value.textContent =
-      t10.toFixed(2) + "%";
-
-
     treasury2Date.textContent =
       "数据日期：" + data.treasury2.date;
+
+
+    treasury10Value.textContent =
+      t10.toFixed(2) + "%";
 
     treasury10Date.textContent =
       "数据日期：" + data.treasury10.date;
 
 
-    const spread =
-      t10 - t2;
-
+    const spread = t10 - t2;
 
     const spreadPrefix =
       spread > 0 ? "+" : "";
-
 
     spreadValue.textContent =
       spreadPrefix +
@@ -1288,16 +1011,12 @@ async function loadMarketData() {
       data.treasury2.date ===
       data.treasury10.date
     ) {
-
       spreadDate.textContent =
         "计算日期：" +
         data.treasury10.date;
-
     } else {
-
       spreadDate.textContent =
         "根据最新2Y / 10Y数据计算";
-
     }
 
 
@@ -1307,10 +1026,9 @@ async function loadMarketData() {
 
 
     console.log(
-      "美债数据读取成功：",
+      "利率数据读取成功：",
       data
     );
-
 
   } catch (error) {
 
@@ -1319,6 +1037,9 @@ async function loadMarketData() {
       error
     );
 
+
+    fedRateValue.textContent =
+      "等待数据";
 
     treasury2Value.textContent =
       "等待数据";
@@ -1330,6 +1051,9 @@ async function loadMarketData() {
       "等待数据";
 
 
+    fedRateDate.textContent =
+      "请使用 GitHub Pages 查看";
+
     treasury2Date.textContent =
       "请使用 GitHub Pages 查看";
 
@@ -1337,7 +1061,6 @@ async function loadMarketData() {
       "请使用 GitHub Pages 查看";
 
     spreadDate.textContent = "";
-
   }
 
 }
@@ -1347,7 +1070,5 @@ loadMarketData();
 
 </script>
 
-
 </body>
-
 </html>
