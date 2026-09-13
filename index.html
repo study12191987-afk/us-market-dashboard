@@ -1,0 +1,1793 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>美国市场宏观仪表盘</title>
+
+
+  <style>
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: Arial, "Microsoft YaHei", sans-serif;
+      background: #f4f6f8;
+      color: #1f2937;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    h1 {
+      font-size: 28px;
+      margin-bottom: 6px;
+    }
+
+    .subtitle {
+      color: #6b7280;
+      margin-bottom: 8px;
+    }
+
+    .demo-note {
+      color: #92400e;
+      background: #fff7ed;
+      border: 1px solid #fed7aa;
+      padding: 10px 12px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    .live-note {
+      color: #166534;
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      padding: 10px 12px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      font-size: 13px;
+      line-height: 1.6;
+      display: none;
+    }
+
+
+    /* =========================
+       顶部市场卡片
+    ========================= */
+
+    .market-top {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    .top-card {
+      background: white;
+      padding: 16px;
+      border-radius: 14px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+
+    .top-card .name {
+      font-size: 14px;
+      color: #6b7280;
+      margin-bottom: 8px;
+    }
+
+    .top-card .value {
+      font-size: 24px;
+      font-weight: bold;
+    }
+
+    .up {
+      color: #16a34a;
+      font-size: 14px;
+      margin-top: 6px;
+    }
+
+    .down {
+      color: #dc2626;
+      font-size: 14px;
+      margin-top: 6px;
+    }
+
+
+    /* =========================
+       通用区块
+    ========================= */
+
+    .section {
+      background: white;
+      border-radius: 14px;
+      padding: 18px;
+      margin-bottom: 16px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+
+    .section-title {
+      font-size: 18px;
+      font-weight: bold;
+      margin-bottom: 14px;
+      border-bottom: 1px solid #e5e7eb;
+      padding-bottom: 10px;
+    }
+
+    .row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      padding: 11px 0;
+      border-bottom: 1px solid #f1f5f9;
+    }
+
+    .row:last-child {
+      border-bottom: none;
+    }
+
+    .label {
+      font-size: 15px;
+    }
+
+    .value {
+      font-weight: bold;
+      white-space: nowrap;
+    }
+
+    .data-date {
+      display: block;
+      color: #94a3b8;
+      font-size: 11px;
+      font-weight: normal;
+      margin-top: 3px;
+      text-align: right;
+    }
+
+
+    /* =========================
+       可点击指标
+    ========================= */
+
+    .clickable {
+      cursor: pointer;
+      color: #2563eb;
+      font-weight: 600;
+    }
+
+    .clickable:hover {
+      text-decoration: underline;
+    }
+
+    .info-icon {
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      width: 18px;
+      height: 18px;
+      margin-left: 5px;
+      border-radius: 50%;
+      background: #e0e7ff;
+      color: #2563eb;
+      font-size: 12px;
+      font-weight: bold;
+      vertical-align: middle;
+    }
+
+
+    /* =========================
+       宏观信号
+    ========================= */
+
+    .signal-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      margin-bottom: 18px;
+    }
+
+    .signal {
+      background: #f8fafc;
+      padding: 12px;
+      border-radius: 10px;
+      font-size: 14px;
+    }
+
+    .score {
+      margin-top: 12px;
+    }
+
+    .score-bar {
+      height: 14px;
+      background: #e5e7eb;
+      border-radius: 20px;
+      overflow: hidden;
+      margin-top: 8px;
+    }
+
+    .score-fill {
+      width: 68%;
+      height: 100%;
+      background: #f59e0b;
+    }
+
+
+    /* =========================
+       弹窗
+    ========================= */
+
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(15, 23, 42, 0.55);
+      padding: 20px;
+      overflow-y: auto;
+    }
+
+    .modal-content {
+      background: white;
+      max-width: 560px;
+      margin: 5vh auto;
+      padding: 24px;
+      border-radius: 18px;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.25);
+      position: relative;
+    }
+
+    .close {
+      position: absolute;
+      right: 18px;
+      top: 14px;
+      font-size: 28px;
+      color: #64748b;
+      cursor: pointer;
+    }
+
+    .close:hover {
+      color: #111827;
+    }
+
+    .modal-title {
+      font-size: 23px;
+      font-weight: bold;
+      margin-bottom: 4px;
+      padding-right: 34px;
+    }
+
+    .modal-english {
+      color: #64748b;
+      font-size: 14px;
+      margin-bottom: 20px;
+    }
+
+    .info-block {
+      margin-bottom: 18px;
+    }
+
+    .info-block h3 {
+      font-size: 16px;
+      margin-bottom: 7px;
+    }
+
+    .info-block p {
+      color: #475569;
+      font-size: 15px;
+      line-height: 1.75;
+    }
+
+    .high-box {
+      background: #fef2f2;
+      padding: 13px;
+      border-radius: 10px;
+      line-height: 1.7;
+    }
+
+    .low-box {
+      background: #f0fdf4;
+      padding: 13px;
+      border-radius: 10px;
+      line-height: 1.7;
+    }
+
+    .stock-box {
+      background: #f8fafc;
+      padding: 13px;
+      border-radius: 10px;
+      line-height: 1.7;
+    }
+
+    .remember-box {
+      background: #eff6ff;
+      padding: 15px;
+      border-radius: 12px;
+      margin-top: 18px;
+      line-height: 1.8;
+    }
+
+
+    /* =========================
+       手机
+    ========================= */
+
+    @media (max-width: 650px) {
+
+      body {
+        padding: 12px;
+      }
+
+      h1 {
+        font-size: 22px;
+      }
+
+      .market-top {
+        grid-template-columns: 1fr;
+      }
+
+      .signal-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .modal-content {
+        margin: 3vh auto;
+        padding: 20px;
+      }
+
+      .row {
+        align-items: flex-start;
+      }
+
+      .label {
+        line-height: 1.5;
+      }
+
+    }
+
+  </style>
+
+</head>
+
+
+<body>
+
+
+<div class="container">
+
+
+  <h1>
+    🇺🇸 美国市场宏观仪表盘
+  </h1>
+
+  <div class="subtitle">
+    US MARKET DASHBOARD
+  </div>
+
+
+  <div id="demoNote" class="demo-note">
+    ⚠️ 当前只有“10年期美债”准备连接真实 FRED 数据。
+    其他数字暂时仍为演示数据。
+  </div>
+
+
+  <div id="liveNote" class="live-note">
+    ✅ 10年期美债已成功读取 FRED 数据。
+  </div>
+
+
+  <!-- =========================
+       顶部市场
+  ========================= -->
+
+  <div class="market-top">
+
+    <div class="top-card">
+
+      <div class="name">
+        标普 500
+      </div>
+
+      <div class="value">
+        6,500
+      </div>
+
+      <div class="up">
+        ▲ +0.62%
+      </div>
+
+    </div>
+
+
+    <div class="top-card">
+
+      <div class="name">
+        纳斯达克
+      </div>
+
+      <div class="value">
+        21,700
+      </div>
+
+      <div class="up">
+        ▲ +0.81%
+      </div>
+
+    </div>
+
+
+    <div class="top-card">
+
+      <div
+        class="name clickable"
+        onclick="openInfo('vix')"
+      >
+        恐慌指数 VIX
+        <span class="info-icon">i</span>
+      </div>
+
+      <div class="value">
+        15.8
+      </div>
+
+      <div class="down">
+        ▼ -2.10%
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- =========================
+       宏观信号
+  ========================= -->
+
+  <div class="section">
+
+    <div class="section-title">
+      📊 宏观信号 MACRO SIGNAL
+    </div>
+
+    <div class="signal-grid">
+
+      <div class="signal">
+        🟢 通胀：降温
+      </div>
+
+      <div class="signal">
+        🟢 流动性：改善
+      </div>
+
+      <div class="signal">
+        🟡 经济：放缓
+      </div>
+
+      <div class="signal">
+        🔴 利率：上升
+      </div>
+
+    </div>
+
+
+    <div class="score">
+
+      市场风险评分：
+      <strong>68 / 100</strong>
+
+      <div class="score-bar">
+        <div class="score-fill"></div>
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- =========================
+       利率
+  ========================= -->
+
+  <div class="section">
+
+    <div class="section-title">
+      💰 利率 INTEREST RATES
+    </div>
+
+
+    <div class="row">
+
+      <div
+        class="label clickable"
+        onclick="openInfo('fedRate')"
+      >
+        联邦基金利率
+        <span class="info-icon">i</span>
+      </div>
+
+      <div class="value">
+        4.25%
+      </div>
+
+    </div>
+
+
+    <div class="row">
+
+      <div
+        class="label clickable"
+        onclick="openInfo('treasury2')"
+      >
+        2年期美债
+        <span class="info-icon">i</span>
+      </div>
+
+      <div class="value">
+        3.65%
+      </div>
+
+    </div>
+
+
+    <!-- 10年期美债：读取 data.json -->
+
+    <div class="row">
+
+      <div
+        class="label clickable"
+        onclick="openInfo('treasury10')"
+      >
+        10年期美债
+        <span class="info-icon">i</span>
+      </div>
+
+      <div class="value">
+
+        <span id="treasury10Value">
+          读取中...
+        </span>
+
+        <span
+          id="treasury10Date"
+          class="data-date"
+        >
+        </span>
+
+      </div>
+
+    </div>
+
+
+    <div class="row">
+
+      <div
+        class="label clickable"
+        onclick="openInfo('spread210')"
+      >
+        2年 - 10年利差
+        <span class="info-icon">i</span>
+      </div>
+
+      <div class="value">
+        0.40%
+      </div>
+
+    </div>
+
+
+    <div class="row">
+
+      <div
+        class="label clickable"
+        onclick="openInfo('realYield10')"
+      >
+        10年期实际利率
+        <span class="info-icon">i</span>
+      </div>
+
+      <div class="value">
+        1.85%
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- =========================
+       通胀
+  ========================= -->
+
+  <div class="section">
+
+    <div class="section-title">
+      🔥 通胀 INFLATION
+    </div>
+
+
+    <div class="row">
+
+      <div
+        class="label clickable"
+        onclick="openInfo('cpi')"
+      >
+        消费者物价 CPI
+        <span class="info-icon">i</span>
+      </div>
+
+      <div class="value">
+        2.8%
+      </div>
+
+    </div>
+
+
+    <div class="row">
+
+      <div
+        class="label clickable"
+        onclick="openInfo('coreCpi')"
+      >
+        核心 CPI
+        <span class="info-icon">i</span>
+      </div>
+
+      <div class="value">
+        3.1%
+      </div>
+
+    </div>
+
+
+    <div class="row">
+
+      <div
+        class="label clickable"
+        onclick="openInfo('corePce')"
+      >
+        核心 PCE
+        <span class="info-icon">i</span>
+      </div>
+
+      <div class="value">
+        2.7%
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- =========================
+       经济
+  ========================= -->
+
+  <div class="section">
+
+    <div class="section-title">
+      🏭 经济 ECONOMY
+    </div>
+
+
+    <div class="row">
+
+      <div
+        class="label clickable"
+        onclick="openInfo('unemployment')"
+      >
+        失业率
+        <span class="info-icon">i</span>
+      </div>
+
+      <div class="value">
+        4.2%
+      </div>
+
+    </div>
+
+
+    <div class="row">
+
+      <div
+        class="label clickable"
+        onclick="openInfo('payrolls')"
+      >
+        非农就业
+        <span class="info-icon">i</span>
+      </div>
+
+      <div class="value">
+        +165K
+      </div>
+
+    </div>
+
+
+    <div class="row">
+
+      <div
+        class="label clickable"
+        onclick="openInfo('claims')"
+      >
+        初请失业金
+        <span class="info-icon">i</span>
+      </div>
+
+      <div class="value">
+        235K
+      </div>
+
+    </div>
+
+
+    <div class="row">
+
+      <div
+        class="label clickable"
+        onclick="openInfo('ismMfg')"
+      >
+        制造业 ISM
+        <span class="info-icon">i</span>
+      </div>
+
+      <div class="value">
+        49.8
+      </div>
+
+    </div>
+
+
+    <div class="row">
+
+      <div
+        class="label clickable"
+        onclick="openInfo('ismServices')"
+      >
+        服务业 ISM
+        <span class="info-icon">i</span>
+      </div>
+
+      <div class="value">
+        52.4
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- =========================
+       市场风险
+  ========================= -->
+
+  <div class="section">
+
+    <div class="section-title">
+      ⚠️ 市场风险 MARKET RISK
+    </div>
+
+
+    <div class="row">
+
+      <div
+        class="label clickable"
+        onclick="openInfo('dxy')"
+      >
+        美元指数 DXY
+        <span class="info-icon">i</span>
+      </div>
+
+      <div class="value">
+        101.2
+      </div>
+
+    </div>
+
+
+    <div class="row">
+
+      <div
+        class="label clickable"
+        onclick="openInfo('vix')"
+      >
+        恐慌指数 VIX
+        <span class="info-icon">i</span>
+      </div>
+
+      <div class="value">
+        15.8
+      </div>
+
+    </div>
+
+
+    <div class="row">
+
+      <div
+        class="label clickable"
+        onclick="openInfo('hySpread')"
+      >
+        高收益债利差
+        <span class="info-icon">i</span>
+      </div>
+
+      <div class="value">
+        3.1%
+      </div>
+
+    </div>
+
+
+    <div class="row">
+
+      <div
+        class="label clickable"
+        onclick="openInfo('oil')"
+      >
+        WTI 原油
+        <span class="info-icon">i</span>
+      </div>
+
+      <div class="value">
+        $68.20
+      </div>
+
+    </div>
+
+
+    <div class="row">
+
+      <div
+        class="label clickable"
+        onclick="openInfo('gold')"
+      >
+        黄金
+        <span class="info-icon">i</span>
+      </div>
+
+      <div class="value">
+        $2,580
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- =========================
+       估值
+  ========================= -->
+
+  <div class="section">
+
+    <div class="section-title">
+      📈 估值 VALUATION
+    </div>
+
+
+    <div class="row">
+
+      <div
+        class="label clickable"
+        onclick="openInfo('forwardPe')"
+      >
+        标普500预期市盈率
+        <span class="info-icon">i</span>
+      </div>
+
+      <div class="value">
+        21.5x
+      </div>
+
+    </div>
+
+
+    <div class="row">
+
+      <div
+        class="label clickable"
+        onclick="openInfo('forwardEps')"
+      >
+        预期每股收益 EPS
+        <span class="info-icon">i</span>
+      </div>
+
+      <div class="value">
+        $265
+      </div>
+
+    </div>
+
+  </div>
+
+
+</div>
+
+
+
+<!-- =========================
+     通用说明弹窗
+========================= -->
+
+<div
+  id="infoModal"
+  class="modal"
+  onclick="closeOutside(event)"
+>
+
+  <div class="modal-content">
+
+    <span
+      class="close"
+      onclick="closeInfo()"
+    >
+      &times;
+    </span>
+
+
+    <div
+      id="modalTitle"
+      class="modal-title"
+    >
+    </div>
+
+
+    <div
+      id="modalEnglish"
+      class="modal-english"
+    >
+    </div>
+
+
+    <div class="info-block">
+
+      <h3>
+        📘 它是什么？
+      </h3>
+
+      <p id="modalWhat"></p>
+
+    </div>
+
+
+    <div class="info-block">
+
+      <h3>
+        🎯 为什么重要？
+      </h3>
+
+      <p id="modalWhy"></p>
+
+    </div>
+
+
+    <div class="info-block">
+
+      <h3>
+        📈 数值较高或上升说明什么？
+      </h3>
+
+      <div
+        id="modalHigh"
+        class="high-box"
+      >
+      </div>
+
+    </div>
+
+
+    <div class="info-block">
+
+      <h3>
+        📉 数值较低或下降说明什么？
+      </h3>
+
+      <div
+        id="modalLow"
+        class="low-box"
+      >
+      </div>
+
+    </div>
+
+
+    <div class="info-block">
+
+      <h3>
+        📊 对美股通常意味着什么？
+      </h3>
+
+      <div
+        id="modalStocks"
+        class="stock-box"
+      >
+      </div>
+
+    </div>
+
+
+    <div
+      id="modalRemember"
+      class="remember-box"
+    >
+    </div>
+
+  </div>
+
+</div>
+
+
+
+<script>
+
+
+const indicatorInfo = {
+
+
+  fedRate: {
+
+    title: "🏦 联邦基金利率",
+
+    english: "Federal Funds Rate",
+
+    what:
+      "这是美国银行之间隔夜借贷所参考的核心短期利率，也是美联储货币政策最重要的利率之一。",
+
+    why:
+      "它会影响银行贷款、信用卡、企业融资、房贷以及整个金融市场的资金成本。",
+
+    high:
+      "利率较高通常代表货币政策偏紧，借钱成本增加，经济活动可能受到压制。",
+
+    low:
+      "利率较低通常代表货币政策更宽松，借钱成本下降，有利于刺激经济和投资。",
+
+    stocks:
+      "降息通常对成长股和科技股估值较友好；加息通常会增加股票估值压力。但也要判断降息是不是因为经济已经明显恶化。",
+
+    remember:
+      "💡 <strong>一句话记忆：</strong><br><br>Fed Rate ↑ → 钱更贵<br>Fed Rate ↓ → 钱更便宜"
+
+  },
+
+
+  treasury2: {
+
+    title: "🇺🇸 2年期美债",
+
+    english: "2-Year Treasury Yield",
+
+    what:
+      "美国政府发行的2年期国债收益率。它对市场预期未来一两年的美联储政策非常敏感。",
+
+    why:
+      "如果市场突然认为美联储会加息或推迟降息，2年期美债收益率往往会迅速上升。",
+
+    high:
+      "2年期收益率上升，通常代表市场预计未来利率会更高或维持高位更久。",
+
+    low:
+      "2年期收益率下降，通常代表市场预计未来可能降息，或者经济正在明显放缓。",
+
+    stocks:
+      "快速上涨通常会给科技股和成长股带来压力；下降则通常减轻估值压力。",
+
+    remember:
+      "💡 <strong>一句话记忆：</strong><br><br>2年期美债 = 市场对美联储未来政策的投票"
+
+  },
+
+
+  treasury10: {
+
+    title: "🇺🇸 10年期美债",
+
+    english: "10-Year Treasury Yield",
+
+    what:
+      "美国政府10年期国债的市场收益率，是全球最重要的长期利率之一。",
+
+    why:
+      "它会影响房贷、企业长期融资成本以及股票估值，特别是高估值成长股。",
+
+    high:
+      "快速上涨代表长期资金成本上升，可能压低股票估值。",
+
+    low:
+      "下降通常意味着长期资金成本降低，对成长股估值通常更友好。",
+
+    stocks:
+      "科技股通常对10年期美债变化比较敏感。但如果利率上涨是因为经济非常强，周期股可能仍然表现不错。",
+
+    remember:
+      "💡 <strong>一句话记忆：</strong><br><br>10年期美债 ↑ → 股票估值压力 ↑<br>10年期美债 ↓ → 股票估值压力 ↓"
+
+  },
+
+
+  spread210: {
+
+    title: "📐 2年 - 10年利差",
+
+    english: "2Y - 10Y Treasury Spread",
+
+    what:
+      "比较10年期美债收益率和2年期美债收益率之间的差距。",
+
+    why:
+      "它可以帮助观察收益率曲线是否正常，也常被用于判断经济周期。",
+
+    high:
+      "正利差扩大通常代表长期利率明显高于短期利率，收益率曲线比较正常。",
+
+    low:
+      "如果利差变成负数，叫做收益率曲线倒挂，历史上常出现在经济衰退之前。",
+
+    stocks:
+      "不能单独用它预测股市，但如果严重倒挂同时伴随就业恶化和信用利差扩大，就需要提高警惕。",
+
+    remember:
+      "💡 <strong>一句话记忆：</strong><br><br>2Y > 10Y = 倒挂<br>倒挂持续较久 → 注意经济衰退风险"
+
+  },
+
+
+  realYield10: {
+
+    title: "🧮 10年期实际利率",
+
+    english: "10-Year Real Yield",
+
+    what:
+      "大致可以理解为扣除通胀预期之后的10年期利率。",
+
+    why:
+      "它反映投资者持有安全资产可以获得的真实回报，因此对股票估值影响很大。",
+
+    high:
+      "实际利率上升时，债券和现金类资产相对更有吸引力，股票估值可能受到压力。",
+
+    low:
+      "实际利率下降时，风险资产相对更有吸引力。",
+
+    stocks:
+      "高估值科技股尤其容易受到实际利率快速上升的影响。",
+
+    remember:
+      "💡 <strong>一句话记忆：</strong><br><br>实际利率 ↑ → 高估值股票压力通常 ↑"
+
+  },
+
+
+  cpi: {
+
+    title: "🔥 消费者物价 CPI",
+
+    english: "Consumer Price Index",
+
+    what:
+      "衡量消费者购买的一篮子商品和服务价格变化，用来观察通胀。",
+
+    why:
+      "它是市场最关注的通胀数据之一，会影响美联储政策预期。",
+
+    high:
+      "CPI持续偏高或重新加速，代表通胀压力较大。",
+
+    low:
+      "CPI持续下降通常代表通胀正在降温。",
+
+    stocks:
+      "CPI超预期上涨，常会推高债券收益率并打击成长股；低于预期则通常相反。",
+
+    remember:
+      "💡 <strong>一句话记忆：</strong><br><br>CPI ↑ → 降息更困难<br>CPI ↓ → 降息空间可能增加"
+
+  },
+
+
+  coreCpi: {
+
+    title: "🔥 核心 CPI",
+
+    english: "Core CPI",
+
+    what:
+      "CPI中剔除波动较大的食品和能源价格之后的通胀指标。",
+
+    why:
+      "它可以帮助观察更持续、更粘性的通胀压力。",
+
+    high:
+      "核心CPI持续较高，说明基础通胀压力仍然明显。",
+
+    low:
+      "持续下降通常说明通胀内部结构正在改善。",
+
+    stocks:
+      "核心CPI如果迟迟不下降，市场可能担心利率长期维持高位。",
+
+    remember:
+      "💡 <strong>一句话记忆：</strong><br><br>核心 CPI = 看通胀是不是“真的”降下来了"
+
+  },
+
+
+  corePce: {
+
+    title: "🔥 核心 PCE",
+
+    english: "Core Personal Consumption Expenditures",
+
+    what:
+      "美国个人消费支出价格指数剔除食品和能源后的指标。",
+
+    why:
+      "这是美联储非常重视的通胀指标之一。",
+
+    high:
+      "核心PCE持续偏高意味着美联储可能需要维持较紧的政策。",
+
+    low:
+      "持续下降会增加未来货币政策放松的空间。",
+
+    stocks:
+      "如果PCE持续降温，同时就业没有明显崩坏，通常是股票市场喜欢看到的组合。",
+
+    remember:
+      "💡 <strong>一句话记忆：</strong><br><br>Core PCE = 美联储非常重视的通胀温度计"
+
+  },
+
+
+  unemployment: {
+
+    title: "👷 失业率",
+
+    english: "Unemployment Rate",
+
+    what:
+      "衡量劳动力中正在找工作但暂时没有工作的人所占比例。",
+
+    why:
+      "它是判断就业市场和经济健康程度的重要指标。",
+
+    high:
+      "失业率快速上升通常意味着经济和就业市场正在明显变弱。",
+
+    low:
+      "失业率很低通常说明就业市场强劲，但太紧也可能带来工资和通胀压力。",
+
+    stocks:
+      "适度上升可能有利于降息预期；快速上升则可能让市场担心衰退。",
+
+    remember:
+      "💡 <strong>一句话记忆：</strong><br><br>失业率小幅升 ≠ 一定坏<br>失业率快速升 → 要小心经济衰退"
+
+  },
+
+
+  payrolls: {
+
+    title: "👷 非农就业",
+
+    english: "Nonfarm Payrolls",
+
+    what:
+      "统计美国除农业等少数行业之外，每个月新增或减少的就业人数。",
+
+    why:
+      "它是最重要的美国就业数据之一，经常造成股票、债券和美元大幅波动。",
+
+    high:
+      "新增就业非常强，代表经济强，但也可能让市场担心通胀和高利率。",
+
+    low:
+      "就业明显变弱说明经济正在降温；如果太弱，则可能引发衰退担忧。",
+
+    stocks:
+      "市场通常喜欢“就业不错但不过热”的状态。太强和太弱都可能造成波动。",
+
+    remember:
+      "💡 <strong>一句话记忆：</strong><br><br>非农最好不是越高越好，而是“刚刚好”"
+
+  },
+
+
+  claims: {
+
+    title: "📋 初请失业金",
+
+    english: "Initial Jobless Claims",
+
+    what:
+      "每周第一次申请失业救济的人数。",
+
+    why:
+      "它每周公布，因此可以比很多月度数据更快发现就业市场变化。",
+
+    high:
+      "申请人数持续增加，通常说明企业裁员正在变多。",
+
+    low:
+      "申请人数维持较低水平，通常说明就业市场仍然比较健康。",
+
+    stocks:
+      "如果初请失业金连续数周明显上升，需要留意经济是否正在加速放缓。",
+
+    remember:
+      "💡 <strong>一句话记忆：</strong><br><br>初请失业金连续 ↑ → 就业市场可能变弱"
+
+  },
+
+
+  ismMfg: {
+
+    title: "🏭 制造业 ISM",
+
+    english: "ISM Manufacturing PMI",
+
+    what:
+      "调查美国制造业企业，判断订单、生产、就业等活动是在扩张还是收缩。",
+
+    why:
+      "它是重要的经济领先指标之一。",
+
+    high:
+      "通常50以上代表制造业扩张，数值越高通常代表活动越强。",
+
+    low:
+      "通常50以下代表制造业收缩。",
+
+    stocks:
+      "持续改善通常有利于周期股和工业股；持续恶化则可能预示经济放缓。",
+
+    remember:
+      "💡 <strong>一句话记忆：</strong><br><br>ISM > 50 = 扩张<br>ISM < 50 = 收缩"
+
+  },
+
+
+  ismServices: {
+
+    title: "🏢 服务业 ISM",
+
+    english: "ISM Services PMI",
+
+    what:
+      "反映美国服务业企业活动状况。美国经济中服务业占比很高。",
+
+    why:
+      "它能够帮助判断美国整体经济是否仍然保持增长。",
+
+    high:
+      "高于50通常代表服务业扩张。",
+
+    low:
+      "低于50通常代表服务业收缩。",
+
+    stocks:
+      "服务业稳定扩张通常有利于企业盈利，但如果价格分项过热，也可能重新引起通胀担忧。",
+
+    remember:
+      "💡 <strong>一句话记忆：</strong><br><br>美国是服务业经济，所以服务业 ISM 很重要"
+
+  },
+
+
+  dxy: {
+
+    title: "💵 美元指数 DXY",
+
+    english: "U.S. Dollar Index",
+
+    what:
+      "衡量美元相对于一篮子主要货币的强弱。",
+
+    why:
+      "美元是全球最重要的储备货币，因此美元强弱会影响全球资金流动。",
+
+    high:
+      "美元快速走强通常代表全球金融条件趋紧。",
+
+    low:
+      "美元走弱通常会减轻部分全球资产的金融压力。",
+
+    stocks:
+      "美元过强可能压制美国跨国公司的海外收入换算，也可能对新兴市场和大宗商品形成压力。",
+
+    remember:
+      "💡 <strong>一句话记忆：</strong><br><br>DXY ↑ → 全球资金环境通常更紧"
+
+  },
+
+
+  vix: {
+
+    title: "😨 恐慌指数 VIX",
+
+    english: "CBOE Volatility Index",
+
+    what:
+      "通过标普500期权价格计算出的市场预期波动率。",
+
+    why:
+      "它经常被称为华尔街恐慌指数。",
+
+    high:
+      "VIX快速上升意味着投资者对未来市场波动和风险的担忧增加。",
+
+    low:
+      "VIX较低通常意味着市场情绪比较平静。",
+
+    stocks:
+      "VIX暴涨往往和股市急跌同时出现，但极高的VIX有时也意味着恐慌已经非常严重。",
+
+    remember:
+      "💡 <strong>一句话记忆：</strong><br><br>VIX ↑ → 市场更害怕<br>VIX ↓ → 市场更平静"
+
+  },
+
+
+  hySpread: {
+
+    title: "⚠️ 高收益债利差",
+
+    english: "High Yield Credit Spread",
+
+    what:
+      "高风险公司债收益率相对于美国国债收益率多出来的部分。",
+
+    why:
+      "它反映债券市场对企业违约风险和金融压力的担忧程度。",
+
+    high:
+      "利差快速扩大，说明投资者越来越担心企业信用风险。",
+
+    low:
+      "利差较低通常代表市场风险偏好较好。",
+
+    stocks:
+      "如果股市下跌、VIX上涨，同时高收益债利差快速扩大，通常是更值得警惕的风险信号。",
+
+    remember:
+      "💡 <strong>一句话记忆：</strong><br><br>信用利差 ↑ → 债券市场开始害怕"
+
+  },
+
+
+  oil: {
+
+    title: "🛢️ WTI 原油",
+
+    english: "West Texas Intermediate Crude Oil",
+
+    what:
+      "美国最重要的原油价格基准之一。",
+
+    why:
+      "原油价格会影响汽油、运输、生产成本以及整体通胀。",
+
+    high:
+      "油价快速上涨可能推高通胀和企业成本。",
+
+    low:
+      "油价下降通常有助于缓解通胀，但如果暴跌也可能代表经济需求非常弱。",
+
+    stocks:
+      "油价上涨通常有利于能源股，但如果上涨太快，也可能增加整个市场的通胀和利率压力。",
+
+    remember:
+      "💡 <strong>一句话记忆：</strong><br><br>油价 ↑ → 通胀压力可能 ↑"
+
+  },
+
+
+  gold: {
+
+    title: "🥇 黄金",
+
+    english: "Gold",
+
+    what:
+      "全球重要的贵金属和储备资产。",
+
+    why:
+      "黄金常受到实际利率、美元、通胀预期、央行购买和避险需求影响。",
+
+    high:
+      "黄金持续上涨可能代表避险需求增加，也可能与美元、实际利率或央行买盘有关。",
+
+    low:
+      "黄金走弱可能代表避险需求下降，或者实际利率和美元较强。",
+
+    stocks:
+      "黄金不能直接判断股票涨跌，但可以帮助观察市场对通胀、美元和风险的态度。",
+
+    remember:
+      "💡 <strong>一句话记忆：</strong><br><br>黄金不是单纯的“恐慌指标”，要结合美元和实际利率一起看"
+
+  },
+
+
+  forwardPe: {
+
+    title: "📊 标普500预期市盈率",
+
+    english: "S&P 500 Forward P/E",
+
+    what:
+      "用标普500当前价格除以未来一年市场预计的企业盈利。",
+
+    why:
+      "它是判断美股整体估值贵不贵的重要指标之一。",
+
+    high:
+      "预期市盈率越高，说明投资者愿意为未来盈利支付更高价格。",
+
+    low:
+      "较低估值通常意味着价格相对于盈利更便宜，但也可能是因为市场预期经济恶化。",
+
+    stocks:
+      "估值很高时，如果利率突然上升或盈利下降，市场容易出现估值压缩。",
+
+    remember:
+      "💡 <strong>一句话记忆：</strong><br><br>PE ↑ 不一定危险<br>但 PE 很高 + 利率 ↑ + EPS ↓ = 要小心"
+
+  },
+
+
+  forwardEps: {
+
+    title: "💰 预期每股收益 EPS",
+
+    english: "Forward Earnings Per Share",
+
+    what:
+      "分析师预计企业未来可以赚多少钱，并按每股计算。",
+
+    why:
+      "长期来看，股票价格最终需要企业盈利支持。",
+
+    high:
+      "如果预期EPS持续上升，通常说明市场预计企业盈利正在改善。",
+
+    low:
+      "如果EPS预期持续下调，说明企业盈利前景正在变差。",
+
+    stocks:
+      "最理想的情况通常是股价上涨，同时EPS也上涨；如果股价暴涨但EPS几乎不增长，估值风险会越来越高。",
+
+    remember:
+      "💡 <strong>一句话记忆：</strong><br><br>股价长期最终要靠 Earnings 支撑"
+
+  }
+
+};
+
+
+
+/* =========================
+   打开指标说明
+========================= */
+
+function openInfo(type) {
+
+  const data = indicatorInfo[type];
+
+  if (!data) {
+    return;
+  }
+
+
+  document.getElementById("modalTitle").innerHTML =
+    data.title;
+
+  document.getElementById("modalEnglish").innerHTML =
+    data.english;
+
+  document.getElementById("modalWhat").innerHTML =
+    data.what;
+
+  document.getElementById("modalWhy").innerHTML =
+    data.why;
+
+  document.getElementById("modalHigh").innerHTML =
+    data.high;
+
+  document.getElementById("modalLow").innerHTML =
+    data.low;
+
+  document.getElementById("modalStocks").innerHTML =
+    data.stocks;
+
+  document.getElementById("modalRemember").innerHTML =
+    data.remember;
+
+
+  document.getElementById("infoModal").style.display =
+    "block";
+
+  document.body.style.overflow =
+    "hidden";
+
+}
+
+
+
+/* =========================
+   关闭弹窗
+========================= */
+
+function closeInfo() {
+
+  document.getElementById("infoModal").style.display =
+    "none";
+
+  document.body.style.overflow =
+    "auto";
+
+}
+
+
+
+function closeOutside(event) {
+
+  if (event.target.id === "infoModal") {
+
+    closeInfo();
+
+  }
+
+}
+
+
+
+document.addEventListener(
+  "keydown",
+  function(event) {
+
+    if (event.key === "Escape") {
+
+      closeInfo();
+
+    }
+
+  }
+);
+
+
+
+/* =====================================================
+   读取 GitHub Actions 生成的 data.json
+===================================================== */
+
+async function loadMarketData() {
+
+  const valueElement =
+    document.getElementById("treasury10Value");
+
+  const dateElement =
+    document.getElementById("treasury10Date");
+
+
+  try {
+
+    /*
+      加 ?t=时间戳，
+      防止浏览器一直显示旧缓存数据
+    */
+
+    const response = await fetch(
+      "data.json?t=" + new Date().getTime()
+    );
+
+
+    if (!response.ok) {
+
+      throw new Error(
+        "无法读取 data.json"
+      );
+
+    }
+
+
+    const data =
+      await response.json();
+
+
+    if (
+      !data.treasury10 ||
+      data.treasury10.value === undefined
+    ) {
+
+      throw new Error(
+        "data.json 中没有 treasury10 数据"
+      );
+
+    }
+
+
+    const treasury10 =
+      data.treasury10;
+
+
+    valueElement.textContent =
+      Number(treasury10.value).toFixed(2) + "%";
+
+
+    if (treasury10.date) {
+
+      dateElement.textContent =
+        "数据日期：" + treasury10.date;
+
+    }
+
+
+    document.getElementById(
+      "liveNote"
+    ).style.display = "block";
+
+
+    console.log(
+      "10年期美债真实数据读取成功：",
+      treasury10
+    );
+
+
+  } catch (error) {
+
+
+    console.error(
+      "读取市场数据失败：",
+      error
+    );
+
+
+    /*
+      如果你电脑本地还没有 data.json，
+      页面不会坏掉，而是显示这个提示。
+    */
+
+    valueElement.textContent =
+      "等待数据";
+
+
+    dateElement.textContent =
+      "请使用 GitHub Pages 查看";
+
+
+  }
+
+}
+
+
+
+/* =========================
+   页面启动时自动读取数据
+========================= */
+
+loadMarketData();
+
+
+</script>
+
+
+</body>
+
+</html>
