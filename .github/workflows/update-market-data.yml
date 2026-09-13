@@ -195,6 +195,10 @@ jobs:
               "DTWEXBGS"
           )
 
+          vix = get_latest_fred_value(
+              "VIXCLS"
+          )
+
 
           # -------------------------
           # 输出 data.json
@@ -216,7 +220,8 @@ jobs:
 
               "hySpread": hy_spread,
               "wti": wti,
-              "broadDollar": broad_dollar
+              "broadDollar": broad_dollar,
+              "vix": vix
           }
 
 
