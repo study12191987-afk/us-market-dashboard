@@ -192,6 +192,10 @@ jobs:
               "BAMLH0A0HYM2"
           )
 
+          wti = get_latest_fred_value(
+              "DCOILWTICO"
+          )
+
 
           # -------------------------
           # 输出 data.json
@@ -211,7 +215,8 @@ jobs:
               "payrolls": payrolls,
               "claims": claims,
 
-              "hySpread": hy_spread
+              "hySpread": hy_spread,
+              "wti": wti
           }
 
 
