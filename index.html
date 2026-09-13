@@ -206,6 +206,28 @@
       background: #f59e0b;
     }
 
+    .gold-area {
+      padding: 14px 0 4px;
+    }
+
+    .gold-heading {
+      margin-bottom: 12px;
+    }
+
+    .gold-widget-wrap {
+      display: flex;
+      justify-content: center;
+      width: 100%;
+    }
+
+    .gold-note {
+      color: #94a3b8;
+      font-size: 11px;
+      text-align: center;
+      line-height: 1.6;
+      margin-top: 8px;
+    }
+
     .modal {
       display: none;
       position: fixed;
@@ -328,8 +350,10 @@
   <div class="subtitle">US MARKET DASHBOARD</div>
 
   <div class="demo-note">
-    ⚠️ 目前股票指数、利率、通胀、部分经济数据、高收益债利差、WTI 原油、
-    广义美元指数和 VIX 使用真实数据。ISM、黄金和估值数据暂时仍为演示数据。
+    ⚠️ 目前股票指数、利率、通胀、部分经济数据、高收益债利差、
+    WTI 原油、广义美元指数和 VIX 使用真实数据。
+    黄金使用独立的最新现货参考价格。
+    ISM 和估值数据暂时仍为演示数据。
   </div>
 
   <div id="liveNote" class="live-note">
@@ -636,13 +660,36 @@
       </div>
     </div>
 
-    <div class="row">
-      <div class="label clickable" onclick="openInfo('gold')">
-        黄金
-        <span class="info-icon">i</span>
+
+    <!-- 黄金 -->
+
+    <div class="gold-area">
+
+      <div class="gold-heading">
+        <span class="label clickable" onclick="openInfo('gold')">
+          黄金 Gold Spot
+          <span class="info-icon">i</span>
+        </span>
       </div>
 
-      <div class="value">$2,580</div>
+      <div class="gold-widget-wrap">
+
+        <iframe
+          src="https://goldprice.dev/embed/xau?currency=USD&unit=oz&karat=24&theme=auto&locale=zh"
+          title="Live gold price"
+          width="360"
+          height="190"
+          loading="lazy"
+          style="border:0;width:100%;max-width:360px"
+          referrerpolicy="strict-origin-when-cross-origin">
+        </iframe>
+
+      </div>
+
+      <div class="gold-note">
+        XAU/USD 现货参考价 · 美元 / 金衡盎司 · Widget 自动更新
+      </div>
+
     </div>
 
   </div>
@@ -914,14 +961,14 @@ const indicatorInfo = {
   },
 
   gold: {
-    title: "🥇 黄金",
-    english: "Gold",
-    what: "全球重要的贵金属和储备资产。",
-    why: "受到实际利率、美元和避险需求影响。",
-    high: "上涨可能反映避险需求增强。",
-    low: "走弱可能与美元或实际利率走强有关。",
-    stocks: "黄金不能单独预测股市。",
-    remember: "💡 <strong>一句话记忆：</strong><br><br>黄金要结合美元和实际利率看"
+    title: "🥇 黄金现货",
+    english: "Gold Spot Price — XAU/USD",
+    what: "这里显示黄金的 XAU/USD 现货参考价格，单位是美元/金衡盎司（Troy Ounce）。",
+    why: "黄金常受到实际利率、美元、通胀预期和避险需求影响。",
+    high: "黄金上涨可能来自美元走弱、实际利率下降、通胀担忧或避险需求增加。",
+    low: "黄金走弱可能与美元走强、实际利率上升或避险需求下降有关。",
+    stocks: "黄金不能单独预测美股涨跌，更适合与美元、实际利率和 VIX 一起观察。",
+    remember: "💡 <strong>一句话记忆：</strong><br><br>黄金要结合美元 + 实际利率 + 避险情绪一起看"
   },
 
   forwardPe: {
@@ -1051,8 +1098,6 @@ async function loadMarketData() {
     const vix = Number(data.vix.value);
 
 
-    // S&P 500
-
     document.getElementById("sp500Value").textContent =
       sp500.toLocaleString(undefined, {
         minimumFractionDigits: 2,
@@ -1070,8 +1115,6 @@ async function loadMarketData() {
     document.getElementById("sp500Change").className =
       sp500Change >= 0 ? "up" : "down";
 
-
-    // Nasdaq
 
     document.getElementById("nasdaqValue").textContent =
       nasdaq.toLocaleString(undefined, {
@@ -1091,16 +1134,12 @@ async function loadMarketData() {
       nasdaqChange >= 0 ? "up" : "down";
 
 
-    // VIX 顶部
-
     document.getElementById("topVixValue").textContent =
       vix.toFixed(2);
 
     document.getElementById("topVixDate").textContent =
       "收盘｜" + data.vix.date;
 
-
-    // 利率
 
     document.getElementById("fedRateValue").textContent =
       fedRate.toFixed(2) + "%";
@@ -1149,8 +1188,6 @@ async function loadMarketData() {
     }
 
 
-    // 通胀
-
     document.getElementById("cpiValue").textContent =
       cpi.toFixed(2) + "%";
 
@@ -1171,8 +1208,6 @@ async function loadMarketData() {
     document.getElementById("corePceDate").textContent =
       "同比 YoY｜数据月份：" + data.corePce.date;
 
-
-    // 经济
 
     document.getElementById("unemploymentValue").textContent =
       unemployment.toFixed(1) + "%";
@@ -1198,8 +1233,6 @@ async function loadMarketData() {
     document.getElementById("claimsDate").textContent =
       "每周初请｜数据日期：" + data.claims.date;
 
-
-    // 市场风险
 
     document.getElementById("broadDollarValue").textContent =
       broadDollar.toFixed(2);
