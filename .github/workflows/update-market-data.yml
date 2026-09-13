@@ -73,6 +73,34 @@ jobs:
               }
 
 
+          def get_latest_with_change_percent(series_id):
+              observations = fetch_fred_observations(
+                  series_id,
+                  limit=10
+              )
+
+              if len(observations) < 2:
+                  raise RuntimeError(
+                      f"Not enough observations for {series_id}"
+                  )
+
+              latest = observations[0]
+              previous = observations[1]
+
+              latest_value = float(latest["value"])
+              previous_value = float(previous["value"])
+
+              change_percent = (
+                  (latest_value / previous_value) - 1
+              ) * 100
+
+              return {
+                  "value": round(latest_value, 2),
+                  "date": latest["date"],
+                  "changePercent": round(change_percent, 2)
+              }
+
+
           def get_yoy_fred_value(series_id):
               observations = fetch_fred_observations(
                   series_id,
@@ -145,6 +173,19 @@ jobs:
 
 
           # -------------------------
+          # 股票市场 Stock Market
+          # -------------------------
+
+          sp500 = get_latest_with_change_percent(
+              "SP500"
+          )
+
+          nasdaq = get_latest_with_change_percent(
+              "NASDAQCOM"
+          )
+
+
+          # -------------------------
           # 利率 Interest Rates
           # -------------------------
 
@@ -205,6 +246,9 @@ jobs:
           # -------------------------
 
           output = {
+              "sp500": sp500,
+              "nasdaq": nasdaq,
+
               "fedRate": fed_rate,
               "treasury2": treasury2,
               "treasury10": treasury10,
