@@ -124,6 +124,31 @@ jobs:
               }
 
 
+          def get_monthly_change(series_id):
+              observations = fetch_fred_observations(
+                  series_id,
+                  limit=10
+              )
+
+              if len(observations) < 2:
+                  raise RuntimeError(
+                      f"Not enough observations for {series_id}"
+                  )
+
+              latest = observations[0]
+              previous = observations[1]
+
+              change = (
+                  float(latest["value"])
+                  - float(previous["value"])
+              )
+
+              return {
+                  "value": round(change, 0),
+                  "date": latest["date"]
+              }
+
+
           # -------------------------
           # 利率 Interest Rates
           # -------------------------
@@ -149,6 +174,17 @@ jobs:
 
 
           # -------------------------
+          # 经济 Economy
+          # -------------------------
+
+          unemployment = get_latest_fred_value("UNRATE")
+
+          payrolls = get_monthly_change("PAYEMS")
+
+          claims = get_latest_fred_value("ICSA")
+
+
+          # -------------------------
           # 输出 data.json
           # -------------------------
 
@@ -160,7 +196,11 @@ jobs:
 
               "cpi": cpi,
               "coreCpi": core_cpi,
-              "corePce": core_pce
+              "corePce": core_pce,
+
+              "unemployment": unemployment,
+              "payrolls": payrolls,
+              "claims": claims
           }
 
 
