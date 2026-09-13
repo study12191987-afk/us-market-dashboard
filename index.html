@@ -333,7 +333,7 @@
   </div>
 
   <div class="demo-note">
-    ⚠️ 目前“有效联邦基金利率、2年期美债、10年期美债、10Y-2Y利差”使用真实数据。
+    ⚠️ 目前“有效联邦基金利率、2年期美债、10年期美债、10Y-2Y利差、10年期实际利率”使用真实数据。
     其他数字暂时仍为演示数据。
   </div>
 
@@ -461,7 +461,8 @@
       </div>
 
       <div class="value">
-        1.85%
+        <span id="realYield10Value">读取中...</span>
+        <span id="realYield10Date" class="data-date"></span>
       </div>
 
     </div>
@@ -717,12 +718,12 @@ const indicatorInfo = {
   realYield10: {
     title: "🧮 10年期实际利率",
     english: "10-Year Real Yield",
-    what: "大致可以理解为扣除通胀预期之后的10年期利率。",
-    why: "它反映投资者持有安全资产可以获得的真实回报，因此对股票估值影响很大。",
-    high: "实际利率上升时，债券和现金类资产相对更有吸引力，股票估值可能受到压力。",
-    low: "实际利率下降时，风险资产相对更有吸引力。",
-    stocks: "高估值科技股尤其容易受到实际利率快速上升的影响。",
-    remember: "💡 <strong>一句话记忆：</strong><br><br>实际利率 ↑ → 高估值股票压力通常 ↑"
+    what: "这里使用美国10年期通胀保值国债 TIPS 的市场收益率，可以理解为市场上的长期实际利率。",
+    why: "它反映投资者在扣除通胀影响后，持有长期美国国债可以获得的真实回报，因此对股票估值非常重要。",
+    high: "实际利率上升时，债券等安全资产的真实回报更有吸引力，高估值股票可能受到压力。",
+    low: "实际利率下降时，长期资金的真实成本下降，通常对成长股和高估值资产更友好。",
+    stocks: "科技股和其他高估值成长股通常对实际利率特别敏感。实际利率快速上涨时，估值压缩风险往往更大。",
+    remember: "💡 <strong>一句话记忆：</strong><br><br>实际利率 ↑ → 高估值股票压力 ↑<br>实际利率 ↓ → 估值压力 ↓"
   },
 
   cpi: {
@@ -936,17 +937,39 @@ document.addEventListener("keydown", function(event) {
 
 async function loadMarketData() {
 
-  const fedRateValue = document.getElementById("fedRateValue");
-  const fedRateDate = document.getElementById("fedRateDate");
+  const fedRateValue =
+    document.getElementById("fedRateValue");
 
-  const treasury2Value = document.getElementById("treasury2Value");
-  const treasury2Date = document.getElementById("treasury2Date");
+  const fedRateDate =
+    document.getElementById("fedRateDate");
 
-  const treasury10Value = document.getElementById("treasury10Value");
-  const treasury10Date = document.getElementById("treasury10Date");
 
-  const spreadValue = document.getElementById("spread210Value");
-  const spreadDate = document.getElementById("spread210Date");
+  const treasury2Value =
+    document.getElementById("treasury2Value");
+
+  const treasury2Date =
+    document.getElementById("treasury2Date");
+
+
+  const treasury10Value =
+    document.getElementById("treasury10Value");
+
+  const treasury10Date =
+    document.getElementById("treasury10Date");
+
+
+  const spreadValue =
+    document.getElementById("spread210Value");
+
+  const spreadDate =
+    document.getElementById("spread210Date");
+
+
+  const realYield10Value =
+    document.getElementById("realYield10Value");
+
+  const realYield10Date =
+    document.getElementById("realYield10Date");
 
 
   try {
@@ -961,18 +984,28 @@ async function loadMarketData() {
 
     const data = await response.json();
 
+
     if (
       !data.fedRate ||
       !data.treasury2 ||
-      !data.treasury10
+      !data.treasury10 ||
+      !data.realYield10
     ) {
       throw new Error("缺少利率数据");
     }
 
 
-    const fedRate = Number(data.fedRate.value);
-    const t2 = Number(data.treasury2.value);
-    const t10 = Number(data.treasury10.value);
+    const fedRate =
+      Number(data.fedRate.value);
+
+    const t2 =
+      Number(data.treasury2.value);
+
+    const t10 =
+      Number(data.treasury10.value);
+
+    const realYield10 =
+      Number(data.realYield10.value);
 
 
     fedRateValue.textContent =
@@ -996,7 +1029,15 @@ async function loadMarketData() {
       "数据日期：" + data.treasury10.date;
 
 
-    const spread = t10 - t2;
+    realYield10Value.textContent =
+      realYield10.toFixed(2) + "%";
+
+    realYield10Date.textContent =
+      "数据日期：" + data.realYield10.date;
+
+
+    const spread =
+      t10 - t2;
 
     const spreadPrefix =
       spread > 0 ? "+" : "";
@@ -1011,12 +1052,16 @@ async function loadMarketData() {
       data.treasury2.date ===
       data.treasury10.date
     ) {
+
       spreadDate.textContent =
         "计算日期：" +
         data.treasury10.date;
+
     } else {
+
       spreadDate.textContent =
         "根据最新2Y / 10Y数据计算";
+
     }
 
 
@@ -1050,6 +1095,9 @@ async function loadMarketData() {
     spreadValue.textContent =
       "等待数据";
 
+    realYield10Value.textContent =
+      "等待数据";
+
 
     fedRateDate.textContent =
       "请使用 GitHub Pages 查看";
@@ -1061,6 +1109,9 @@ async function loadMarketData() {
       "请使用 GitHub Pages 查看";
 
     spreadDate.textContent = "";
+
+    realYield10Date.textContent =
+      "请使用 GitHub Pages 查看";
   }
 
 }
