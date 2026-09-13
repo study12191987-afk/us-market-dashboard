@@ -96,6 +96,12 @@
       margin-top: 6px;
     }
 
+    .down {
+      color: #dc2626;
+      font-size: 14px;
+      margin-top: 6px;
+    }
+
     .section {
       background: white;
       border-radius: 14px;
@@ -260,25 +266,24 @@
       line-height: 1.75;
     }
 
-    .high-box {
-      background: #fef2f2;
+    .high-box,
+    .low-box,
+    .stock-box {
       padding: 13px;
       border-radius: 10px;
       line-height: 1.7;
+    }
+
+    .high-box {
+      background: #fef2f2;
     }
 
     .low-box {
       background: #f0fdf4;
-      padding: 13px;
-      border-radius: 10px;
-      line-height: 1.7;
     }
 
     .stock-box {
       background: #f8fafc;
-      padding: 13px;
-      border-radius: 10px;
-      line-height: 1.7;
     }
 
     .remember-box {
@@ -298,10 +303,7 @@
         font-size: 22px;
       }
 
-      .market-top {
-        grid-template-columns: 1fr;
-      }
-
+      .market-top,
       .signal-grid {
         grid-template-columns: 1fr;
       }
@@ -314,10 +316,6 @@
       .row {
         align-items: flex-start;
       }
-
-      .label {
-        line-height: 1.5;
-      }
     }
   </style>
 </head>
@@ -327,35 +325,38 @@
 <div class="container">
 
   <h1>🇺🇸 美国市场宏观仪表盘</h1>
-
-  <div class="subtitle">
-    US MARKET DASHBOARD
-  </div>
+  <div class="subtitle">US MARKET DASHBOARD</div>
 
   <div class="demo-note">
-    ⚠️ 目前利率、通胀、部分经济数据、高收益债利差、WTI 原油、广义美元指数和 VIX 使用真实数据。
-    其他数字暂时仍为演示数据。
+    ⚠️ 目前股票指数、利率、通胀、部分经济数据、高收益债利差、WTI 原油、
+    广义美元指数和 VIX 使用真实数据。ISM、黄金和估值数据暂时仍为演示数据。
   </div>
 
   <div id="liveNote" class="live-note">
     ✅ 真实市场数据读取成功。
   </div>
 
+
+  <!-- 顶部市场 -->
+
   <div class="market-top">
 
     <div class="top-card">
       <div class="name">标普 500</div>
-      <div class="value">6,500</div>
-      <div class="up">▲ +0.62%</div>
+      <div id="sp500Value" class="value">读取中...</div>
+      <div id="sp500Change" class="up">读取中...</div>
+      <div id="sp500Date" class="top-date"></div>
     </div>
 
     <div class="top-card">
       <div class="name">纳斯达克</div>
-      <div class="value">21,700</div>
-      <div class="up">▲ +0.81%</div>
+      <div id="nasdaqValue" class="value">读取中...</div>
+      <div id="nasdaqChange" class="up">读取中...</div>
+      <div id="nasdaqDate" class="top-date"></div>
     </div>
 
     <div class="top-card">
+
       <div class="name clickable" onclick="openInfo('vix')">
         恐慌指数 VIX
         <span class="info-icon">i</span>
@@ -363,9 +364,13 @@
 
       <div id="topVixValue" class="value">读取中...</div>
       <div id="topVixDate" class="top-date"></div>
+
     </div>
 
   </div>
+
+
+  <!-- 宏观信号 -->
 
   <div class="section">
 
@@ -391,6 +396,9 @@
 
   </div>
 
+
+  <!-- 利率 -->
+
   <div class="section">
 
     <div class="section-title">
@@ -402,6 +410,7 @@
         有效联邦基金利率
         <span class="info-icon">i</span>
       </div>
+
       <div class="value">
         <span id="fedRateValue">读取中...</span>
         <span id="fedRateDate" class="data-date"></span>
@@ -413,6 +422,7 @@
         2年期美债
         <span class="info-icon">i</span>
       </div>
+
       <div class="value">
         <span id="treasury2Value">读取中...</span>
         <span id="treasury2Date" class="data-date"></span>
@@ -424,6 +434,7 @@
         10年期美债
         <span class="info-icon">i</span>
       </div>
+
       <div class="value">
         <span id="treasury10Value">读取中...</span>
         <span id="treasury10Date" class="data-date"></span>
@@ -435,6 +446,7 @@
         10年 - 2年利差
         <span class="info-icon">i</span>
       </div>
+
       <div class="value">
         <span id="spread210Value">计算中...</span>
         <span id="spread210Date" class="data-date"></span>
@@ -446,6 +458,7 @@
         10年期实际利率
         <span class="info-icon">i</span>
       </div>
+
       <div class="value">
         <span id="realYield10Value">读取中...</span>
         <span id="realYield10Date" class="data-date"></span>
@@ -453,6 +466,9 @@
     </div>
 
   </div>
+
+
+  <!-- 通胀 -->
 
   <div class="section">
 
@@ -465,6 +481,7 @@
         消费者物价 CPI
         <span class="info-icon">i</span>
       </div>
+
       <div class="value">
         <span id="cpiValue">读取中...</span>
         <span id="cpiDate" class="data-date"></span>
@@ -476,6 +493,7 @@
         核心 CPI
         <span class="info-icon">i</span>
       </div>
+
       <div class="value">
         <span id="coreCpiValue">读取中...</span>
         <span id="coreCpiDate" class="data-date"></span>
@@ -487,6 +505,7 @@
         核心 PCE
         <span class="info-icon">i</span>
       </div>
+
       <div class="value">
         <span id="corePceValue">读取中...</span>
         <span id="corePceDate" class="data-date"></span>
@@ -494,6 +513,9 @@
     </div>
 
   </div>
+
+
+  <!-- 经济 -->
 
   <div class="section">
 
@@ -506,6 +528,7 @@
         失业率
         <span class="info-icon">i</span>
       </div>
+
       <div class="value">
         <span id="unemploymentValue">读取中...</span>
         <span id="unemploymentDate" class="data-date"></span>
@@ -517,6 +540,7 @@
         非农就业
         <span class="info-icon">i</span>
       </div>
+
       <div class="value">
         <span id="payrollsValue">读取中...</span>
         <span id="payrollsDate" class="data-date"></span>
@@ -528,6 +552,7 @@
         初请失业金
         <span class="info-icon">i</span>
       </div>
+
       <div class="value">
         <span id="claimsValue">读取中...</span>
         <span id="claimsDate" class="data-date"></span>
@@ -539,6 +564,7 @@
         制造业 ISM
         <span class="info-icon">i</span>
       </div>
+
       <div class="value">49.8</div>
     </div>
 
@@ -547,10 +573,14 @@
         服务业 ISM
         <span class="info-icon">i</span>
       </div>
+
       <div class="value">52.4</div>
     </div>
 
   </div>
+
+
+  <!-- 市场风险 -->
 
   <div class="section">
 
@@ -611,10 +641,14 @@
         黄金
         <span class="info-icon">i</span>
       </div>
+
       <div class="value">$2,580</div>
     </div>
 
   </div>
+
+
+  <!-- 估值 -->
 
   <div class="section">
 
@@ -627,6 +661,7 @@
         标普500预期市盈率
         <span class="info-icon">i</span>
       </div>
+
       <div class="value">21.5x</div>
     </div>
 
@@ -635,6 +670,7 @@
         预期每股收益 EPS
         <span class="info-icon">i</span>
       </div>
+
       <div class="value">$265</div>
     </div>
 
@@ -643,13 +679,13 @@
 </div>
 
 
+<!-- 指标解释窗口 -->
+
 <div id="infoModal" class="modal" onclick="closeOutside(event)">
 
   <div class="modal-content">
 
-    <span class="close" onclick="closeInfo()">
-      &times;
-    </span>
+    <span class="close" onclick="closeInfo()">&times;</span>
 
     <div id="modalTitle" class="modal-title"></div>
     <div id="modalEnglish" class="modal-english"></div>
@@ -737,7 +773,7 @@ const indicatorInfo = {
   realYield10: {
     title: "🧮 10年期实际利率",
     english: "10-Year Real Yield",
-    what: "这里使用10年期TIPS市场收益率。",
+    what: "这里使用10年期 TIPS 市场收益率。",
     why: "反映长期真实资金成本。",
     high: "实际利率上升会增加高估值股票压力。",
     low: "下降通常对成长股更友好。",
@@ -752,25 +788,25 @@ const indicatorInfo = {
     why: "美国最重要的通胀指标之一。",
     high: "持续偏高会增加高利率持续时间。",
     low: "下降通常代表通胀降温。",
-    stocks: "CPI降温通常减轻成长股估值压力。",
+    stocks: "CPI 降温通常减轻成长股估值压力。",
     remember: "💡 <strong>一句话记忆：</strong><br><br>CPI ↑ → 降息更难"
   },
 
   coreCpi: {
     title: "🔥 核心 CPI",
     english: "Core CPI — YoY",
-    what: "剔除食品和能源之后的CPI。",
+    what: "剔除食品和能源之后的 CPI。",
     why: "帮助观察基础通胀压力。",
     high: "偏高代表通胀仍较顽固。",
     low: "下降代表通胀压力缓解。",
-    stocks: "核心CPI降温通常对成长股比较友好。",
+    stocks: "核心 CPI 降温通常对成长股比较友好。",
     remember: "💡 <strong>一句话记忆：</strong><br><br>Core CPI = 看通胀是否真的降温"
   },
 
   corePce: {
     title: "🔥 核心 PCE",
     english: "Core PCE Price Index — YoY",
-    what: "剔除食品和能源后的PCE价格指数。",
+    what: "剔除食品和能源后的 PCE 价格指数。",
     why: "是美联储非常重视的通胀指标。",
     high: "持续偏高代表通胀压力仍大。",
     low: "持续下降通常代表通胀改善。",
@@ -816,8 +852,8 @@ const indicatorInfo = {
     english: "ISM Manufacturing PMI",
     what: "衡量美国制造业活动。",
     why: "是重要经济领先指标。",
-    high: "通常50以上代表扩张。",
-    low: "通常50以下代表收缩。",
+    high: "通常 50 以上代表扩张。",
+    low: "通常 50 以下代表收缩。",
     stocks: "持续改善通常有利于周期股。",
     remember: "💡 <strong>一句话记忆：</strong><br><br>ISM > 50 = 扩张"
   },
@@ -827,8 +863,8 @@ const indicatorInfo = {
     english: "ISM Services PMI",
     what: "衡量美国服务业活动。",
     why: "美国经济中服务业占比很高。",
-    high: "50以上通常代表扩张。",
-    low: "50以下通常代表收缩。",
+    high: "50 以上通常代表扩张。",
+    low: "50 以下通常代表收缩。",
     stocks: "稳定扩张通常有利于企业盈利。",
     remember: "💡 <strong>一句话记忆：</strong><br><br>Services ISM > 50 = 扩张"
   },
@@ -838,21 +874,21 @@ const indicatorInfo = {
     english: "Nominal Broad U.S. Dollar Index",
     what: "这是美联储发布的广义美元指数，衡量美元相对于美国主要贸易伙伴货币的整体强弱。它不是行情软件里常见的 DXY。",
     why: "美元强弱会影响全球资金流动、美国出口企业、进口价格以及金融条件。",
-    high: "指数上升代表美元整体走强。美元过强可能让全球美元融资环境趋紧。",
-    low: "指数下降代表美元整体走弱，通常会减轻部分全球金融压力。",
-    stocks: "美元持续快速走强可能压低美国跨国企业海外收入换算后的美元价值，也可能给新兴市场和风险资产带来压力。",
-    remember: "💡 <strong>一句话记忆：</strong><br><br>Broad Dollar ↑ → 美元整体更强<br>Broad Dollar ↓ → 美元整体更弱"
+    high: "指数上升代表美元整体走强。",
+    low: "指数下降代表美元整体走弱。",
+    stocks: "美元持续快速走强可能增加全球金融条件压力，并影响美国跨国企业海外收入。",
+    remember: "💡 <strong>一句话记忆：</strong><br><br>Broad Dollar ↑ → 美元整体更强"
   },
 
   vix: {
     title: "😨 恐慌指数 VIX",
     english: "CBOE Volatility Index",
     what: "VIX 反映市场根据标普500期权价格，对未来约30天市场波动程度的预期。",
-    why: "它常被称为华尔街“恐慌指数”，可以帮助观察投资者是否突然变得紧张。",
-    high: "VIX 快速上升通常代表市场担忧增加、预期波动扩大。非常高的 VIX 往往出现在市场剧烈下跌或重大不确定时期。",
-    low: "VIX 较低通常代表市场比较平静。不过长期过低也可能代表投资者过度放松。",
-    stocks: "VIX 快速上涨通常与美股下跌同时出现；VIX 回落通常说明市场紧张情绪在缓解。",
-    remember: "💡 <strong>一句话记忆：</strong><br><br>VIX ↑ → 市场更害怕<br>VIX ↓ → 市场更平静"
+    why: "它常被称为华尔街恐慌指数。",
+    high: "VIX 快速上升通常代表市场担忧增加。",
+    low: "VIX 较低通常代表市场比较平静。",
+    stocks: "VIX 快速上涨通常与美股下跌同时出现。",
+    remember: "💡 <strong>一句话记忆：</strong><br><br>VIX ↑ → 市场更害怕"
   },
 
   hySpread: {
@@ -862,8 +898,8 @@ const indicatorInfo = {
     why: "是观察信用市场压力的重要指标。",
     high: "利差扩大通常说明信用风险或市场压力上升。",
     low: "利差收窄通常说明风险偏好较好。",
-    stocks: "利差快速扩大同时VIX上涨时通常值得警惕。",
-    remember: "💡 <strong>一句话记忆：</strong><br><br>High Yield Spread ↑ → 信用市场更害怕"
+    stocks: "利差快速扩大同时 VIX 上涨时通常值得警惕。",
+    remember: "💡 <strong>一句话记忆：</strong><br><br>High Yield Spread ↑ → 信用风险 ↑"
   },
 
   oil: {
@@ -906,7 +942,7 @@ const indicatorInfo = {
     why: "长期股价需要盈利支持。",
     high: "持续上升代表盈利预期改善。",
     low: "持续下降代表盈利前景变弱。",
-    stocks: "股价和EPS一起增长通常更加健康。",
+    stocks: "股价和 EPS 一起增长通常更加健康。",
     remember: "💡 <strong>一句话记忆：</strong><br><br>股价长期最终要靠 Earnings 支撑"
   }
 
@@ -914,6 +950,7 @@ const indicatorInfo = {
 
 
 function openInfo(type) {
+
   const data = indicatorInfo[type];
 
   if (!data) return;
@@ -968,6 +1005,8 @@ async function loadMarketData() {
 
 
     if (
+      !data.sp500 ||
+      !data.nasdaq ||
       !data.fedRate ||
       !data.treasury2 ||
       !data.treasury10 ||
@@ -987,6 +1026,12 @@ async function loadMarketData() {
     }
 
 
+    const sp500 = Number(data.sp500.value);
+    const sp500Change = Number(data.sp500.changePercent);
+
+    const nasdaq = Number(data.nasdaq.value);
+    const nasdaqChange = Number(data.nasdaq.changePercent);
+
     const fedRate = Number(data.fedRate.value);
     const t2 = Number(data.treasury2.value);
     const t10 = Number(data.treasury10.value);
@@ -1005,6 +1050,57 @@ async function loadMarketData() {
     const broadDollar = Number(data.broadDollar.value);
     const vix = Number(data.vix.value);
 
+
+    // S&P 500
+
+    document.getElementById("sp500Value").textContent =
+      sp500.toLocaleString(undefined, {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      });
+
+    document.getElementById("sp500Date").textContent =
+      "收盘｜" + data.sp500.date;
+
+    document.getElementById("sp500Change").textContent =
+      (sp500Change >= 0 ? "▲ +" : "▼ ") +
+      sp500Change.toFixed(2) +
+      "%";
+
+    document.getElementById("sp500Change").className =
+      sp500Change >= 0 ? "up" : "down";
+
+
+    // Nasdaq
+
+    document.getElementById("nasdaqValue").textContent =
+      nasdaq.toLocaleString(undefined, {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      });
+
+    document.getElementById("nasdaqDate").textContent =
+      "收盘｜" + data.nasdaq.date;
+
+    document.getElementById("nasdaqChange").textContent =
+      (nasdaqChange >= 0 ? "▲ +" : "▼ ") +
+      nasdaqChange.toFixed(2) +
+      "%";
+
+    document.getElementById("nasdaqChange").className =
+      nasdaqChange >= 0 ? "up" : "down";
+
+
+    // VIX 顶部
+
+    document.getElementById("topVixValue").textContent =
+      vix.toFixed(2);
+
+    document.getElementById("topVixDate").textContent =
+      "收盘｜" + data.vix.date;
+
+
+    // 利率
 
     document.getElementById("fedRateValue").textContent =
       fedRate.toFixed(2) + "%";
@@ -1042,13 +1138,18 @@ async function loadMarketData() {
 
 
     if (data.treasury2.date === data.treasury10.date) {
+
       document.getElementById("spread210Date").textContent =
         "计算日期：" + data.treasury10.date;
+
     } else {
+
       document.getElementById("spread210Date").textContent =
         "根据最新2Y / 10Y数据计算";
     }
 
+
+    // 通胀
 
     document.getElementById("cpiValue").textContent =
       cpi.toFixed(2) + "%";
@@ -1070,6 +1171,8 @@ async function loadMarketData() {
     document.getElementById("corePceDate").textContent =
       "同比 YoY｜数据月份：" + data.corePce.date;
 
+
+    // 经济
 
     document.getElementById("unemploymentValue").textContent =
       unemployment.toFixed(1) + "%";
@@ -1096,19 +1199,7 @@ async function loadMarketData() {
       "每周初请｜数据日期：" + data.claims.date;
 
 
-    document.getElementById("hySpreadValue").textContent =
-      hySpread.toFixed(2) + "%";
-
-    document.getElementById("hySpreadDate").textContent =
-      "数据日期：" + data.hySpread.date;
-
-
-    document.getElementById("wtiValue").textContent =
-      "$" + wti.toFixed(2);
-
-    document.getElementById("wtiDate").textContent =
-      "美元/桶｜数据日期：" + data.wti.date;
-
+    // 市场风险
 
     document.getElementById("broadDollarValue").textContent =
       broadDollar.toFixed(2);
@@ -1124,11 +1215,18 @@ async function loadMarketData() {
       "收盘值｜数据日期：" + data.vix.date;
 
 
-    document.getElementById("topVixValue").textContent =
-      vix.toFixed(2);
+    document.getElementById("hySpreadValue").textContent =
+      hySpread.toFixed(2) + "%";
 
-    document.getElementById("topVixDate").textContent =
-      "收盘｜" + data.vix.date;
+    document.getElementById("hySpreadDate").textContent =
+      "数据日期：" + data.hySpread.date;
+
+
+    document.getElementById("wtiValue").textContent =
+      "$" + wti.toFixed(2);
+
+    document.getElementById("wtiDate").textContent =
+      "美元/桶｜数据日期：" + data.wti.date;
 
 
     document.getElementById("liveNote").style.display =
@@ -1140,6 +1238,7 @@ async function loadMarketData() {
       data
     );
 
+
   } catch (error) {
 
     console.error(
@@ -1149,6 +1248,9 @@ async function loadMarketData() {
 
 
     const valueIds = [
+      "sp500Value",
+      "nasdaqValue",
+      "topVixValue",
       "fedRateValue",
       "treasury2Value",
       "treasury10Value",
@@ -1160,21 +1262,29 @@ async function loadMarketData() {
       "unemploymentValue",
       "payrollsValue",
       "claimsValue",
-      "hySpreadValue",
-      "wtiValue",
       "broadDollarValue",
       "vixValue",
-      "topVixValue"
+      "hySpreadValue",
+      "wtiValue"
     ];
 
 
     valueIds.forEach(function(id) {
+
       document.getElementById(id).textContent =
         "等待数据";
+
     });
 
 
+    document.getElementById("sp500Change").textContent = "";
+    document.getElementById("nasdaqChange").textContent = "";
+
+
     const dateIds = [
+      "sp500Date",
+      "nasdaqDate",
+      "topVixDate",
       "fedRateDate",
       "treasury2Date",
       "treasury10Date",
@@ -1185,23 +1295,23 @@ async function loadMarketData() {
       "unemploymentDate",
       "payrollsDate",
       "claimsDate",
-      "hySpreadDate",
-      "wtiDate",
       "broadDollarDate",
       "vixDate",
-      "topVixDate"
+      "hySpreadDate",
+      "wtiDate"
     ];
 
 
     dateIds.forEach(function(id) {
+
       document.getElementById(id).textContent =
         "请使用 GitHub Pages 查看";
+
     });
 
 
-    document.getElementById(
-      "spread210Date"
-    ).textContent = "";
+    document.getElementById("spread210Date").textContent = "";
+
   }
 
 }
