@@ -26,5 +26,17 @@
   "corePce": {
     "value": 3.34,
     "date": "2026-07-01"
+  },
+  "unemployment": {
+    "value": 4.1,
+    "date": "2026-08-01"
+  },
+  "payrolls": {
+    "value": 162.0,
+    "date": "2026-08-01"
+  },
+  "claims": {
+    "value": 206000.0,
+    "date": "2026-09-05"
   }
 }
