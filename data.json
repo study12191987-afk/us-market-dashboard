@@ -1,4 +1,14 @@
 {
+  "sp500": {
+    "value": 7656.98,
+    "date": "2026-09-11",
+    "changePercent": 0.86
+  },
+  "nasdaq": {
+    "value": 26333.04,
+    "date": "2026-09-11",
+    "changePercent": 0.96
+  },
   "fedRate": {
     "value": 3.63,
     "date": "2026-09-10"
