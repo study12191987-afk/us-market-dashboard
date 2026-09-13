@@ -333,12 +333,12 @@
   </div>
 
   <div class="demo-note">
-    ⚠️ 目前“有效联邦基金利率、2年期美债、10年期美债、10Y-2Y利差、10年期实际利率”使用真实数据。
+    ⚠️ 目前利率区和通胀区使用真实数据。
     其他数字暂时仍为演示数据。
   </div>
 
   <div id="liveNote" class="live-note">
-    ✅ 利率真实数据读取成功。
+    ✅ 利率与通胀真实数据读取成功。
   </div>
 
   <div class="market-top">
@@ -398,7 +398,6 @@
     </div>
 
     <div class="row">
-
       <div class="label clickable" onclick="openInfo('fedRate')">
         有效联邦基金利率
         <span class="info-icon">i</span>
@@ -408,11 +407,9 @@
         <span id="fedRateValue">读取中...</span>
         <span id="fedRateDate" class="data-date"></span>
       </div>
-
     </div>
 
     <div class="row">
-
       <div class="label clickable" onclick="openInfo('treasury2')">
         2年期美债
         <span class="info-icon">i</span>
@@ -422,11 +419,9 @@
         <span id="treasury2Value">读取中...</span>
         <span id="treasury2Date" class="data-date"></span>
       </div>
-
     </div>
 
     <div class="row">
-
       <div class="label clickable" onclick="openInfo('treasury10')">
         10年期美债
         <span class="info-icon">i</span>
@@ -436,11 +431,9 @@
         <span id="treasury10Value">读取中...</span>
         <span id="treasury10Date" class="data-date"></span>
       </div>
-
     </div>
 
     <div class="row">
-
       <div class="label clickable" onclick="openInfo('spread210')">
         10年 - 2年利差
         <span class="info-icon">i</span>
@@ -450,11 +443,9 @@
         <span id="spread210Value">计算中...</span>
         <span id="spread210Date" class="data-date"></span>
       </div>
-
     </div>
 
     <div class="row">
-
       <div class="label clickable" onclick="openInfo('realYield10')">
         10年期实际利率
         <span class="info-icon">i</span>
@@ -464,7 +455,6 @@
         <span id="realYield10Value">读取中...</span>
         <span id="realYield10Date" class="data-date"></span>
       </div>
-
     </div>
 
   </div>
@@ -480,7 +470,11 @@
         消费者物价 CPI
         <span class="info-icon">i</span>
       </div>
-      <div class="value">2.8%</div>
+
+      <div class="value">
+        <span id="cpiValue">读取中...</span>
+        <span id="cpiDate" class="data-date"></span>
+      </div>
     </div>
 
     <div class="row">
@@ -488,7 +482,11 @@
         核心 CPI
         <span class="info-icon">i</span>
       </div>
-      <div class="value">3.1%</div>
+
+      <div class="value">
+        <span id="coreCpiValue">读取中...</span>
+        <span id="coreCpiDate" class="data-date"></span>
+      </div>
     </div>
 
     <div class="row">
@@ -496,7 +494,11 @@
         核心 PCE
         <span class="info-icon">i</span>
       </div>
-      <div class="value">2.7%</div>
+
+      <div class="value">
+        <span id="corePceValue">读取中...</span>
+        <span id="corePceDate" class="data-date"></span>
+      </div>
     </div>
 
   </div>
@@ -728,34 +730,34 @@ const indicatorInfo = {
 
   cpi: {
     title: "🔥 消费者物价 CPI",
-    english: "Consumer Price Index",
-    what: "衡量消费者购买的一篮子商品和服务价格变化，用来观察通胀。",
-    why: "它是市场最关注的通胀数据之一，会影响美联储政策预期。",
-    high: "CPI持续偏高或重新加速，代表通胀压力较大。",
-    low: "CPI持续下降通常代表通胀正在降温。",
-    stocks: "CPI超预期上涨，常会推高债券收益率并打击成长股；低于预期则通常相反。",
-    remember: "💡 <strong>一句话记忆：</strong><br><br>CPI ↑ → 降息更困难<br>CPI ↓ → 降息空间可能增加"
+    english: "Consumer Price Index — YoY",
+    what: "衡量美国消费者购买的一篮子商品和服务价格变化。这里显示的是与一年前同月相比的同比涨幅 YoY。",
+    why: "CPI 是市场最关注的通胀数据之一，会直接影响市场对美联储加息、降息和利率路径的预期。",
+    high: "CPI同比持续偏高或重新加速，代表通胀压力较大，美联储可能更难快速降息。",
+    low: "CPI同比持续下降通常代表通胀正在降温，有利于货币政策逐渐放松。",
+    stocks: "CPI高于市场预期时，债券收益率往往容易上升，对科技股和高估值股票不利；低于预期通常相反。",
+    remember: "💡 <strong>一句话记忆：</strong><br><br>CPI ↑ → 降息更难<br>CPI ↓ → 降息空间可能增加"
   },
 
   coreCpi: {
     title: "🔥 核心 CPI",
-    english: "Core CPI",
-    what: "CPI中剔除波动较大的食品和能源价格之后的通胀指标。",
-    why: "它可以帮助观察更持续、更粘性的通胀压力。",
-    high: "核心CPI持续较高，说明基础通胀压力仍然明显。",
-    low: "持续下降通常说明通胀内部结构正在改善。",
-    stocks: "核心CPI如果迟迟不下降，市场可能担心利率长期维持高位。",
-    remember: "💡 <strong>一句话记忆：</strong><br><br>核心 CPI = 看通胀是不是“真的”降下来了"
+    english: "Core CPI — YoY",
+    what: "核心 CPI 剔除了价格波动较大的食品和能源项目。这里显示的是同比 YoY 涨幅。",
+    why: "核心 CPI 能帮助判断基础通胀是不是仍然顽固，因此市场和美联储都非常关注。",
+    high: "核心 CPI 持续偏高说明基础通胀仍然比较粘，美联储可能需要让利率维持高位更久。",
+    low: "核心 CPI 持续下降说明更深层的通胀压力正在缓解。",
+    stocks: "如果核心 CPI 降温，通常有利于债券和成长股；如果重新加速，则可能提高利率和估值压力。",
+    remember: "💡 <strong>一句话记忆：</strong><br><br>Core CPI = 看通胀是不是真的在降温"
   },
 
   corePce: {
     title: "🔥 核心 PCE",
-    english: "Core Personal Consumption Expenditures",
-    what: "美国个人消费支出价格指数剔除食品和能源后的指标。",
-    why: "这是美联储非常重视的通胀指标之一。",
-    high: "核心PCE持续偏高意味着美联储可能需要维持较紧的政策。",
-    low: "持续下降会增加未来货币政策放松的空间。",
-    stocks: "如果PCE持续降温，同时就业没有明显崩坏，通常是股票市场喜欢看到的组合。",
+    english: "Core PCE Price Index — YoY",
+    what: "核心 PCE 是美国个人消费支出价格指数剔除食品和能源之后的通胀指标。这里显示同比 YoY。",
+    why: "核心 PCE 是美联储判断通胀趋势时非常重要的指标之一。",
+    high: "核心 PCE 持续偏高，代表美联储控制通胀的任务还没有完成。",
+    low: "核心 PCE 持续向下通常意味着通胀正在向美联储目标方向改善。",
+    stocks: "核心 PCE 温和下降，同时就业保持稳定，通常是美股比较喜欢的宏观组合。",
     remember: "💡 <strong>一句话记忆：</strong><br><br>Core PCE = 美联储非常重视的通胀温度计"
   },
 
@@ -972,6 +974,27 @@ async function loadMarketData() {
     document.getElementById("realYield10Date");
 
 
+  const cpiValue =
+    document.getElementById("cpiValue");
+
+  const cpiDate =
+    document.getElementById("cpiDate");
+
+
+  const coreCpiValue =
+    document.getElementById("coreCpiValue");
+
+  const coreCpiDate =
+    document.getElementById("coreCpiDate");
+
+
+  const corePceValue =
+    document.getElementById("corePceValue");
+
+  const corePceDate =
+    document.getElementById("corePceDate");
+
+
   try {
 
     const response = await fetch(
@@ -989,9 +1012,12 @@ async function loadMarketData() {
       !data.fedRate ||
       !data.treasury2 ||
       !data.treasury10 ||
-      !data.realYield10
+      !data.realYield10 ||
+      !data.cpi ||
+      !data.coreCpi ||
+      !data.corePce
     ) {
-      throw new Error("缺少利率数据");
+      throw new Error("缺少市场数据");
     }
 
 
@@ -1006,6 +1032,15 @@ async function loadMarketData() {
 
     const realYield10 =
       Number(data.realYield10.value);
+
+    const cpi =
+      Number(data.cpi.value);
+
+    const coreCpi =
+      Number(data.coreCpi.value);
+
+    const corePce =
+      Number(data.corePce.value);
 
 
     fedRateValue.textContent =
@@ -1065,13 +1100,37 @@ async function loadMarketData() {
     }
 
 
+    cpiValue.textContent =
+      cpi.toFixed(2) + "%";
+
+    cpiDate.textContent =
+      "同比 YoY｜数据月份：" +
+      data.cpi.date;
+
+
+    coreCpiValue.textContent =
+      coreCpi.toFixed(2) + "%";
+
+    coreCpiDate.textContent =
+      "同比 YoY｜数据月份：" +
+      data.coreCpi.date;
+
+
+    corePceValue.textContent =
+      corePce.toFixed(2) + "%";
+
+    corePceDate.textContent =
+      "同比 YoY｜数据月份：" +
+      data.corePce.date;
+
+
     document.getElementById(
       "liveNote"
     ).style.display = "block";
 
 
     console.log(
-      "利率数据读取成功：",
+      "市场数据读取成功：",
       data
     );
 
@@ -1098,6 +1157,15 @@ async function loadMarketData() {
     realYield10Value.textContent =
       "等待数据";
 
+    cpiValue.textContent =
+      "等待数据";
+
+    coreCpiValue.textContent =
+      "等待数据";
+
+    corePceValue.textContent =
+      "等待数据";
+
 
     fedRateDate.textContent =
       "请使用 GitHub Pages 查看";
@@ -1108,10 +1176,19 @@ async function loadMarketData() {
     treasury10Date.textContent =
       "请使用 GitHub Pages 查看";
 
-    spreadDate.textContent = "";
-
     realYield10Date.textContent =
       "请使用 GitHub Pages 查看";
+
+    cpiDate.textContent =
+      "请使用 GitHub Pages 查看";
+
+    coreCpiDate.textContent =
+      "请使用 GitHub Pages 查看";
+
+    corePceDate.textContent =
+      "请使用 GitHub Pages 查看";
+
+    spreadDate.textContent = "";
   }
 
 }
