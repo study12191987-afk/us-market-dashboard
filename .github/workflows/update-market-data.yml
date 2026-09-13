@@ -95,28 +95,23 @@ jobs:
                   year=latest_date.year - 1
               ).strftime("%Y-%m-%d")
 
-
               values_by_date = {
                   observation["date"]:
                   float(observation["value"])
                   for observation in observations
               }
 
-
               if year_ago_date not in values_by_date:
                   raise RuntimeError(
                       f"Missing year-ago observation for {series_id}"
                   )
 
-
               latest_value = float(latest["value"])
               year_ago_value = values_by_date[year_ago_date]
-
 
               yoy = (
                   (latest_value / year_ago_value) - 1
               ) * 100
-
 
               return {
                   "value": round(yoy, 2),
@@ -196,6 +191,10 @@ jobs:
               "DCOILWTICO"
           )
 
+          broad_dollar = get_latest_fred_value(
+              "DTWEXBGS"
+          )
+
 
           # -------------------------
           # 输出 data.json
@@ -216,7 +215,8 @@ jobs:
               "claims": claims,
 
               "hySpread": hy_spread,
-              "wti": wti
+              "wti": wti,
+              "broadDollar": broad_dollar
           }
 
 
