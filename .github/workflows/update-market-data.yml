@@ -25,16 +25,18 @@ jobs:
           import os
           import urllib.parse
           import urllib.request
+          from datetime import datetime
 
           api_key = os.environ["FRED_API_KEY"]
 
-          def get_latest_fred_value(series_id):
+
+          def fetch_fred_observations(series_id, limit=40):
               params = {
                   "series_id": series_id,
                   "api_key": api_key,
                   "file_type": "json",
                   "sort_order": "desc",
-                  "limit": 10
+                  "limit": limit
               }
 
               url = (
@@ -45,33 +47,129 @@ jobs:
               with urllib.request.urlopen(url) as response:
                   fred_data = json.load(response)
 
-              for observation in fred_data["observations"]:
-                  if observation["value"] != ".":
-                      return {
-                          "value": float(observation["value"]),
-                          "date": observation["date"]
-                      }
+              return [
+                  observation
+                  for observation in fred_data["observations"]
+                  if observation["value"] != "."
+              ]
 
-              raise RuntimeError(
-                  f"No valid observation found for {series_id}"
+
+          def get_latest_fred_value(series_id):
+              observations = fetch_fred_observations(
+                  series_id,
+                  limit=10
               )
 
+              if not observations:
+                  raise RuntimeError(
+                      f"No valid observation found for {series_id}"
+                  )
+
+              latest = observations[0]
+
+              return {
+                  "value": float(latest["value"]),
+                  "date": latest["date"]
+              }
+
+
+          def get_yoy_fred_value(series_id):
+              observations = fetch_fred_observations(
+                  series_id,
+                  limit=30
+              )
+
+              if not observations:
+                  raise RuntimeError(
+                      f"No valid observation found for {series_id}"
+                  )
+
+              latest = observations[0]
+
+              latest_date = datetime.strptime(
+                  latest["date"],
+                  "%Y-%m-%d"
+              )
+
+              year_ago_date = latest_date.replace(
+                  year=latest_date.year - 1
+              ).strftime("%Y-%m-%d")
+
+
+              values_by_date = {
+                  observation["date"]:
+                  float(observation["value"])
+                  for observation in observations
+              }
+
+
+              if year_ago_date not in values_by_date:
+                  raise RuntimeError(
+                      f"Missing year-ago observation for {series_id}"
+                  )
+
+
+              latest_value = float(latest["value"])
+              year_ago_value = values_by_date[year_ago_date]
+
+
+              yoy = (
+                  (latest_value / year_ago_value) - 1
+              ) * 100
+
+
+              return {
+                  "value": round(yoy, 2),
+                  "date": latest["date"]
+              }
+
+
+          # -------------------------
+          # 利率 Interest Rates
+          # -------------------------
 
           fed_rate = get_latest_fred_value("DFF")
+
           treasury2 = get_latest_fred_value("DGS2")
+
           treasury10 = get_latest_fred_value("DGS10")
+
           real_yield10 = get_latest_fred_value("DFII10")
 
+
+          # -------------------------
+          # 通胀 Inflation
+          # -------------------------
+
+          cpi = get_yoy_fred_value("CPIAUCSL")
+
+          core_cpi = get_yoy_fred_value("CPILFESL")
+
+          core_pce = get_yoy_fred_value("PCEPILFE")
+
+
+          # -------------------------
+          # 输出 data.json
+          # -------------------------
 
           output = {
               "fedRate": fed_rate,
               "treasury2": treasury2,
               "treasury10": treasury10,
-              "realYield10": real_yield10
+              "realYield10": real_yield10,
+
+              "cpi": cpi,
+              "coreCpi": core_cpi,
+              "corePce": core_pce
           }
 
 
-          with open("data.json", "w", encoding="utf-8") as f:
+          with open(
+              "data.json",
+              "w",
+              encoding="utf-8"
+          ) as f:
+
               json.dump(
                   output,
                   f,
@@ -81,7 +179,9 @@ jobs:
 
 
           print(output)
+
           PY
+
 
       - name: Commit updated data
         run: |
