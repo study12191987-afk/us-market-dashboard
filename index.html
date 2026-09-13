@@ -333,12 +333,12 @@
   </div>
 
   <div class="demo-note">
-    ⚠️ 目前利率、通胀，以及经济区的失业率、非农就业、初请失业金使用真实数据。
+    ⚠️ 目前利率、通胀、部分经济数据，以及高收益债利差使用真实数据。
     其他数字暂时仍为演示数据。
   </div>
 
   <div id="liveNote" class="live-note">
-    ✅ 利率、通胀与经济真实数据读取成功。
+    ✅ 真实市场数据读取成功。
   </div>
 
   <div class="market-top">
@@ -590,7 +590,11 @@
         高收益债利差
         <span class="info-icon">i</span>
       </div>
-      <div class="value">3.1%</div>
+
+      <div class="value">
+        <span id="hySpreadValue">读取中...</span>
+        <span id="hySpreadDate" class="data-date"></span>
+      </div>
     </div>
 
     <div class="row">
@@ -714,161 +718,161 @@ const indicatorInfo = {
     why: "它会影响房贷、企业长期融资成本以及股票估值，特别是高估值成长股。",
     high: "快速上涨代表长期资金成本上升，可能压低股票估值。",
     low: "下降通常意味着长期资金成本降低，对成长股估值通常更友好。",
-    stocks: "科技股通常对10年期美债变化比较敏感。但如果利率上涨是因为经济非常强，周期股可能仍然表现不错。",
-    remember: "💡 <strong>一句话记忆：</strong><br><br>10年期美债 ↑ → 股票估值压力 ↑<br>10年期美债 ↓ → 股票估值压力 ↓"
+    stocks: "科技股通常对10年期美债变化比较敏感。",
+    remember: "💡 <strong>一句话记忆：</strong><br><br>10年期美债 ↑ → 股票估值压力 ↑"
   },
 
   spread210: {
     title: "📐 10年 - 2年利差",
     english: "10Y - 2Y Treasury Spread",
-    what: "用10年期美国国债收益率减去2年期美国国债收益率，观察收益率曲线的形状。",
-    why: "它可以帮助观察市场对未来经济增长、通胀以及货币政策的预期。",
-    high: "利差为正并扩大，表示10年期收益率明显高于2年期，收益率曲线更加陡峭。",
-    low: "如果利差变成负数，就代表2年期收益率高于10年期，也就是常说的收益率曲线倒挂。",
-    stocks: "不能单独用它预测股市。但如果倒挂持续，同时就业恶化、信用利差扩大，就需要提高对经济衰退的警惕。",
-    remember: "💡 <strong>一句话记忆：</strong><br><br>10Y - 2Y < 0 = 倒挂<br>倒挂持续较久 → 注意经济衰退风险"
+    what: "用10年期美国国债收益率减去2年期美国国债收益率。",
+    why: "它帮助观察收益率曲线以及市场对未来经济的预期。",
+    high: "利差为正并扩大，代表收益率曲线更加陡峭。",
+    low: "如果利差低于0，代表收益率曲线倒挂。",
+    stocks: "不能单独用它预测股市，需要结合就业和信用市场判断。",
+    remember: "💡 <strong>一句话记忆：</strong><br><br>10Y - 2Y < 0 = 倒挂"
   },
 
   realYield10: {
     title: "🧮 10年期实际利率",
     english: "10-Year Real Yield",
-    what: "这里使用美国10年期通胀保值国债 TIPS 的市场收益率，可以理解为市场上的长期实际利率。",
-    why: "它反映投资者在扣除通胀影响后，持有长期美国国债可以获得的真实回报，因此对股票估值非常重要。",
-    high: "实际利率上升时，债券等安全资产的真实回报更有吸引力，高估值股票可能受到压力。",
-    low: "实际利率下降时，长期资金的真实成本下降，通常对成长股和高估值资产更友好。",
-    stocks: "科技股和其他高估值成长股通常对实际利率特别敏感。实际利率快速上涨时，估值压缩风险往往更大。",
-    remember: "💡 <strong>一句话记忆：</strong><br><br>实际利率 ↑ → 高估值股票压力 ↑<br>实际利率 ↓ → 估值压力 ↓"
+    what: "这里使用10年期TIPS市场收益率。",
+    why: "它反映长期真实资金成本。",
+    high: "实际利率上升会增加高估值股票压力。",
+    low: "实际利率下降通常对成长股更友好。",
+    stocks: "科技股通常对实际利率非常敏感。",
+    remember: "💡 <strong>一句话记忆：</strong><br><br>实际利率 ↑ → 高估值股票压力 ↑"
   },
 
   cpi: {
     title: "🔥 消费者物价 CPI",
     english: "Consumer Price Index — YoY",
-    what: "衡量美国消费者购买的一篮子商品和服务价格变化。这里显示的是与一年前同月相比的同比涨幅 YoY。",
-    why: "CPI 是市场最关注的通胀数据之一，会直接影响市场对美联储加息、降息和利率路径的预期。",
-    high: "CPI同比持续偏高或重新加速，代表通胀压力较大，美联储可能更难快速降息。",
-    low: "CPI同比持续下降通常代表通胀正在降温，有利于货币政策逐渐放松。",
-    stocks: "CPI高于市场预期时，债券收益率往往容易上升，对科技股和高估值股票不利；低于预期通常相反。",
-    remember: "💡 <strong>一句话记忆：</strong><br><br>CPI ↑ → 降息更难<br>CPI ↓ → 降息空间可能增加"
+    what: "衡量消费者商品和服务价格变化，这里显示同比 YoY。",
+    why: "CPI 是市场最关注的美国通胀指标之一。",
+    high: "CPI持续偏高会增加高利率持续时间。",
+    low: "CPI下降通常代表通胀正在降温。",
+    stocks: "CPI低于预期通常对成长股比较有利。",
+    remember: "💡 <strong>一句话记忆：</strong><br><br>CPI ↑ → 降息更难"
   },
 
   coreCpi: {
     title: "🔥 核心 CPI",
     english: "Core CPI — YoY",
-    what: "核心 CPI 剔除了价格波动较大的食品和能源项目。这里显示的是同比 YoY 涨幅。",
-    why: "核心 CPI 能帮助判断基础通胀是不是仍然顽固，因此市场和美联储都非常关注。",
-    high: "核心 CPI 持续偏高说明基础通胀仍然比较粘，美联储可能需要让利率维持高位更久。",
-    low: "核心 CPI 持续下降说明更深层的通胀压力正在缓解。",
-    stocks: "如果核心 CPI 降温，通常有利于债券和成长股；如果重新加速，则可能提高利率和估值压力。",
-    remember: "💡 <strong>一句话记忆：</strong><br><br>Core CPI = 看通胀是不是真的在降温"
+    what: "剔除食品和能源之后的CPI。",
+    why: "帮助判断基础通胀是否仍然顽固。",
+    high: "核心CPI持续偏高代表通胀压力仍强。",
+    low: "持续下降意味着通胀压力缓解。",
+    stocks: "核心CPI降温通常有利于成长股。",
+    remember: "💡 <strong>一句话记忆：</strong><br><br>Core CPI = 看通胀是否真的降温"
   },
 
   corePce: {
     title: "🔥 核心 PCE",
     english: "Core PCE Price Index — YoY",
-    what: "核心 PCE 是美国个人消费支出价格指数剔除食品和能源之后的通胀指标。这里显示同比 YoY。",
-    why: "核心 PCE 是美联储判断通胀趋势时非常重要的指标之一。",
-    high: "核心 PCE 持续偏高，代表美联储控制通胀的任务还没有完成。",
-    low: "核心 PCE 持续向下通常意味着通胀正在向美联储目标方向改善。",
-    stocks: "核心 PCE 温和下降，同时就业保持稳定，通常是美股比较喜欢的宏观组合。",
-    remember: "💡 <strong>一句话记忆：</strong><br><br>Core PCE = 美联储非常重视的通胀温度计"
+    what: "剔除食品和能源后的PCE价格指数。",
+    why: "这是美联储非常重视的通胀指标。",
+    high: "持续偏高意味着控制通胀仍有压力。",
+    low: "持续下降通常意味着通胀正在改善。",
+    stocks: "温和下降通常对美股比较友好。",
+    remember: "💡 <strong>一句话记忆：</strong><br><br>Core PCE = 美联储重要的通胀温度计"
   },
 
   unemployment: {
     title: "👷 失业率",
     english: "Unemployment Rate",
-    what: "衡量美国劳动力中正在找工作但暂时没有工作的人所占比例。",
-    why: "它是判断美国就业市场和经济健康程度的重要指标。",
-    high: "失业率持续或快速上升，通常说明就业市场正在明显变弱。",
-    low: "失业率较低通常说明就业市场健康，但就业过热也可能增加工资和通胀压力。",
-    stocks: "适度上升有时会增加降息预期，但如果失业率快速上升，则可能引起经济衰退担忧。",
-    remember: "💡 <strong>一句话记忆：</strong><br><br>失业率小幅升 ≠ 一定坏<br>快速持续上升 → 要注意经济风险"
+    what: "衡量劳动力中正在找工作但没有工作的人所占比例。",
+    why: "它是美国就业市场的重要指标。",
+    high: "快速上升通常代表就业市场变弱。",
+    low: "较低通常代表就业市场健康。",
+    stocks: "快速上升可能增加衰退风险。",
+    remember: "💡 <strong>一句话记忆：</strong><br><br>失业率持续快速上升 → 注意经济风险"
   },
 
   payrolls: {
     title: "👷 非农就业",
     english: "Nonfarm Payrolls",
-    what: "这里显示美国非农就业总人数相比上个月增加或减少了多少，单位是千人 K。",
-    why: "非农就业是美国最重要的就业数据之一，经常明显影响美股、美债和美元。",
-    high: "新增就业很强说明经济和企业招聘活跃，但太强也可能让市场担心利率维持高位。",
-    low: "就业增长明显放缓代表经济正在降温，如果持续负增长，则需要留意衰退风险。",
-    stocks: "市场通常喜欢就业保持增长但不过热。过强可能增加利率压力，过弱则可能增加衰退担忧。",
-    remember: "💡 <strong>一句话记忆：</strong><br><br>非农不是越高越好<br>市场通常喜欢“不错但不过热”"
+    what: "显示美国非农就业人数相比上个月增加或减少多少。",
+    why: "它是美国最重要的就业数据之一。",
+    high: "新增就业强代表经济和招聘活跃。",
+    low: "就业增长明显变弱代表经济降温。",
+    stocks: "市场通常喜欢就业不错但不过热。",
+    remember: "💡 <strong>一句话记忆：</strong><br><br>非农最好是“不错但不过热”"
   },
 
   claims: {
     title: "📋 初请失业金",
     english: "Initial Jobless Claims",
-    what: "统计每周第一次申请失业保险救济的人数。",
-    why: "它每周公布，所以比月度就业数据更及时，可以帮助观察企业裁员是否正在增加。",
-    high: "申请人数持续上升通常说明裁员增加，就业市场正在变弱。",
-    low: "申请人数维持较低水平，通常说明企业裁员不多，就业市场仍然健康。",
-    stocks: "偶尔一周上升并不重要，更值得观察的是连续数周明显上升的趋势。",
-    remember: "💡 <strong>一句话记忆：</strong><br><br>初请失业金持续 ↑ → 就业市场可能正在变弱"
+    what: "统计每周第一次申请失业保险的人数。",
+    why: "可以较快观察企业裁员变化。",
+    high: "持续上升通常代表裁员增加。",
+    low: "维持较低通常代表就业市场健康。",
+    stocks: "连续多周上升比单周变化更值得关注。",
+    remember: "💡 <strong>一句话记忆：</strong><br><br>初请失业金持续 ↑ → 就业市场可能变弱"
   },
 
   ismMfg: {
     title: "🏭 制造业 ISM",
     english: "ISM Manufacturing PMI",
-    what: "调查美国制造业企业，判断订单、生产、就业等活动是在扩张还是收缩。",
-    why: "它是重要的经济领先指标之一。",
-    high: "通常50以上代表制造业扩张。",
-    low: "通常50以下代表制造业收缩。",
-    stocks: "持续改善通常有利于周期股和工业股；持续恶化则可能预示经济放缓。",
-    remember: "💡 <strong>一句话记忆：</strong><br><br>ISM > 50 = 扩张<br>ISM < 50 = 收缩"
+    what: "衡量美国制造业活动。",
+    why: "是重要经济领先指标。",
+    high: "通常50以上代表扩张。",
+    low: "通常50以下代表收缩。",
+    stocks: "持续改善通常有利于周期股。",
+    remember: "💡 <strong>一句话记忆：</strong><br><br>ISM > 50 = 扩张"
   },
 
   ismServices: {
     title: "🏢 服务业 ISM",
     english: "ISM Services PMI",
-    what: "反映美国服务业企业活动状况。",
-    why: "美国经济中服务业占比很高，因此它是重要的经济指标。",
-    high: "高于50通常代表服务业扩张。",
-    low: "低于50通常代表服务业收缩。",
-    stocks: "稳定扩张通常有利于企业盈利，但过热也可能增加通胀压力。",
-    remember: "💡 <strong>一句话记忆：</strong><br><br>服务业 ISM > 50 通常代表扩张"
+    what: "衡量美国服务业活动。",
+    why: "服务业在美国经济中占比很高。",
+    high: "50以上通常代表扩张。",
+    low: "50以下通常代表收缩。",
+    stocks: "稳定扩张通常有利于企业盈利。",
+    remember: "💡 <strong>一句话记忆：</strong><br><br>Services ISM > 50 = 扩张"
   },
 
   dxy: {
     title: "💵 美元指数 DXY",
     english: "U.S. Dollar Index",
-    what: "衡量美元相对于一篮子主要货币的强弱。",
-    why: "美元强弱会影响全球资金流动。",
-    high: "美元快速走强通常代表全球金融条件趋紧。",
-    low: "美元走弱通常会减轻部分全球资产的金融压力。",
-    stocks: "美元过强可能压制美国跨国公司的海外收入换算。",
-    remember: "💡 <strong>一句话记忆：</strong><br><br>DXY ↑ → 全球资金环境通常更紧"
+    what: "衡量美元相对一篮子主要货币的强弱。",
+    why: "美元影响全球资金流动。",
+    high: "美元走强通常让全球金融条件偏紧。",
+    low: "美元走弱通常减轻部分金融压力。",
+    stocks: "美元过强可能影响美国跨国企业盈利。",
+    remember: "💡 <strong>一句话记忆：</strong><br><br>DXY ↑ → 全球资金条件偏紧"
   },
 
   vix: {
     title: "😨 恐慌指数 VIX",
     english: "CBOE Volatility Index",
-    what: "通过标普500期权价格计算出的市场预期波动率。",
-    why: "它经常被称为华尔街恐慌指数。",
-    high: "VIX快速上升意味着投资者对未来市场风险的担忧增加。",
-    low: "VIX较低通常意味着市场比较平静。",
-    stocks: "VIX暴涨往往和股市急跌同时出现。",
+    what: "反映市场对未来标普500波动率的预期。",
+    why: "常被称为华尔街恐慌指数。",
+    high: "快速上升代表市场风险担忧增加。",
+    low: "较低通常代表市场比较平静。",
+    stocks: "VIX暴涨通常和股市急跌同时发生。",
     remember: "💡 <strong>一句话记忆：</strong><br><br>VIX ↑ → 市场更害怕"
   },
 
   hySpread: {
     title: "⚠️ 高收益债利差",
-    english: "High Yield Credit Spread",
-    what: "高风险公司债相对于美国国债多出来的收益率。",
-    why: "它反映债券市场对企业违约风险的担忧。",
-    high: "利差快速扩大说明信用风险担忧增加。",
-    low: "利差较低通常代表风险偏好较好。",
-    stocks: "如果股市下跌同时信用利差快速扩大，需要提高警惕。",
-    remember: "💡 <strong>一句话记忆：</strong><br><br>信用利差 ↑ → 债券市场开始害怕"
+    english: "ICE BofA U.S. High Yield Option-Adjusted Spread",
+    what: "衡量美国高收益公司债相对于美国国债需要额外支付多少收益率，用来补偿投资者承担更高的信用和违约风险。",
+    why: "它是观察金融市场信用压力非常重要的指标。有时股票市场看起来还很平静，但信用市场已经先开始紧张。",
+    high: "利差快速扩大意味着投资者要求更高的风险补偿，通常说明企业信用风险、违约担忧或市场压力正在上升。",
+    low: "利差较低或持续收窄，通常说明投资者愿意承担风险，企业融资环境比较宽松。",
+    stocks: "如果高收益债利差快速扩大，同时VIX上升、股市下跌，通常是比较值得警惕的风险组合。",
+    remember: "💡 <strong>一句话记忆：</strong><br><br>High Yield Spread ↑ → 信用市场更害怕<br>High Yield Spread ↓ → 风险偏好通常更好"
   },
 
   oil: {
     title: "🛢️ WTI 原油",
     english: "West Texas Intermediate Crude Oil",
     what: "美国重要的原油价格基准。",
-    why: "油价会影响汽油、运输、企业成本和通胀。",
-    high: "油价快速上涨可能推高通胀。",
-    low: "油价下降有助于缓解通胀，但暴跌也可能代表需求很弱。",
-    stocks: "上涨通常有利于能源股，但过快上涨会增加整体市场通胀压力。",
+    why: "油价会影响企业成本和通胀。",
+    high: "快速上涨可能推高通胀。",
+    low: "下降通常缓解通胀压力。",
+    stocks: "上涨通常有利于能源股，但太快上涨会增加通胀压力。",
     remember: "💡 <strong>一句话记忆：</strong><br><br>油价 ↑ → 通胀压力可能 ↑"
   },
 
@@ -876,32 +880,32 @@ const indicatorInfo = {
     title: "🥇 黄金",
     english: "Gold",
     what: "全球重要的贵金属和储备资产。",
-    why: "黄金受到实际利率、美元、央行购买和避险需求等因素影响。",
-    high: "持续上涨可能反映避险需求或其他宏观因素变化。",
+    why: "受到实际利率、美元和避险需求影响。",
+    high: "上涨可能反映避险需求或其他宏观变化。",
     low: "走弱可能与实际利率或美元走强有关。",
-    stocks: "黄金不能直接预测股市涨跌。",
-    remember: "💡 <strong>一句话记忆：</strong><br><br>黄金要结合美元和实际利率一起看"
+    stocks: "黄金不能直接预测股市。",
+    remember: "💡 <strong>一句话记忆：</strong><br><br>黄金要结合美元和实际利率看"
   },
 
   forwardPe: {
     title: "📊 标普500预期市盈率",
     english: "S&P 500 Forward P/E",
-    what: "用标普500价格除以未来一年市场预计的盈利。",
-    why: "它是判断美股整体估值的重要指标。",
-    high: "较高说明投资者愿意为未来盈利支付更高价格。",
-    low: "较低代表估值更便宜，但也可能因为盈利预期较差。",
-    stocks: "高估值遇到利率上升或盈利下降时容易出现估值压缩。",
-    remember: "💡 <strong>一句话记忆：</strong><br><br>高 PE + 利率 ↑ + EPS ↓ = 要小心"
+    what: "当前价格相对于未来预期盈利的估值。",
+    why: "是判断美股估值的重要指标。",
+    high: "估值越高，对利率和盈利变化越敏感。",
+    low: "较低意味着估值相对便宜。",
+    stocks: "高估值遇到利率上升容易出现估值压缩。",
+    remember: "💡 <strong>一句话记忆：</strong><br><br>高 PE + 利率 ↑ = 注意估值压力"
   },
 
   forwardEps: {
     title: "💰 预期每股收益 EPS",
     english: "Forward Earnings Per Share",
-    what: "分析师预计企业未来可以赚多少钱，并按每股计算。",
-    why: "长期来看股票价格需要企业盈利支持。",
-    high: "EPS预期持续上升通常代表企业盈利改善。",
-    low: "持续下调说明盈利前景变差。",
-    stocks: "股价和EPS一起增长通常比只涨股价更加健康。",
+    what: "分析师预计企业未来每股能赚多少钱。",
+    why: "长期股票价格需要盈利支持。",
+    high: "持续上升代表盈利预期改善。",
+    low: "持续下降代表盈利前景变差。",
+    stocks: "股价和EPS一起增长通常更加健康。",
     remember: "💡 <strong>一句话记忆：</strong><br><br>股价长期最终要靠 Earnings 支撑"
   }
 
@@ -972,7 +976,8 @@ async function loadMarketData() {
       !data.corePce ||
       !data.unemployment ||
       !data.payrolls ||
-      !data.claims
+      !data.claims ||
+      !data.hySpread
     ) {
       throw new Error("缺少市场数据");
     }
@@ -990,6 +995,8 @@ async function loadMarketData() {
     const unemployment = Number(data.unemployment.value);
     const payrolls = Number(data.payrolls.value);
     const claims = Number(data.claims.value);
+
+    const hySpread = Number(data.hySpread.value);
 
 
     document.getElementById("fedRateValue").textContent =
@@ -1091,6 +1098,13 @@ async function loadMarketData() {
       data.claims.date;
 
 
+    document.getElementById("hySpreadValue").textContent =
+      hySpread.toFixed(2) + "%";
+
+    document.getElementById("hySpreadDate").textContent =
+      "数据日期：" + data.hySpread.date;
+
+
     document.getElementById("liveNote").style.display =
       "block";
 
@@ -1119,7 +1133,8 @@ async function loadMarketData() {
       "corePceValue",
       "unemploymentValue",
       "payrollsValue",
-      "claimsValue"
+      "claimsValue",
+      "hySpreadValue"
     ];
 
 
@@ -1139,7 +1154,8 @@ async function loadMarketData() {
       "corePceDate",
       "unemploymentDate",
       "payrollsDate",
-      "claimsDate"
+      "claimsDate",
+      "hySpreadDate"
     ];
 
 
