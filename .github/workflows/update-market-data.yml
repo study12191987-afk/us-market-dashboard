@@ -30,7 +30,7 @@ jobs:
           api_key = os.environ["FRED_API_KEY"]
 
 
-          def fetch_fred_observations(series_id, limit=40):
+          def fetch_fred_observations(series_id, limit=60):
               params = {
                   "series_id": series_id,
                   "api_key": api_key,
@@ -101,27 +101,11 @@ jobs:
               }
 
 
-          def get_yoy_fred_value(series_id):
+          def get_yoy_history(series_id, count=4):
               observations = fetch_fred_observations(
                   series_id,
-                  limit=30
+                  limit=40
               )
-
-              if not observations:
-                  raise RuntimeError(
-                      f"No valid observation found for {series_id}"
-                  )
-
-              latest = observations[0]
-
-              latest_date = datetime.strptime(
-                  latest["date"],
-                  "%Y-%m-%d"
-              )
-
-              year_ago_date = latest_date.replace(
-                  year=latest_date.year - 1
-              ).strftime("%Y-%m-%d")
 
               values_by_date = {
                   observation["date"]:
@@ -129,28 +113,113 @@ jobs:
                   for observation in observations
               }
 
-              if year_ago_date not in values_by_date:
-                  raise RuntimeError(
-                      f"Missing year-ago observation for {series_id}"
+              results = []
+
+              for observation in observations:
+
+                  current_date = datetime.strptime(
+                      observation["date"],
+                      "%Y-%m-%d"
                   )
 
-              latest_value = float(latest["value"])
-              year_ago_value = values_by_date[year_ago_date]
+                  try:
+                      year_ago_date = current_date.replace(
+                          year=current_date.year - 1
+                      ).strftime("%Y-%m-%d")
+                  except ValueError:
+                      continue
 
-              yoy = (
-                  (latest_value / year_ago_value) - 1
-              ) * 100
+                  if year_ago_date not in values_by_date:
+                      continue
+
+                  current_value = float(
+                      observation["value"]
+                  )
+
+                  year_ago_value = values_by_date[
+                      year_ago_date
+                  ]
+
+                  yoy = (
+                      (current_value / year_ago_value) - 1
+                  ) * 100
+
+                  results.append({
+                      "value": round(yoy, 2),
+                      "date": observation["date"]
+                  })
+
+                  if len(results) >= count:
+                      break
+
+              if not results:
+                  raise RuntimeError(
+                      f"No YoY history found for {series_id}"
+                  )
+
+              return results
+
+
+          def get_yoy_fred_value(series_id):
+
+              history = get_yoy_history(
+                  series_id,
+                  count=4
+              )
+
+              latest = history[0]
 
               return {
-                  "value": round(yoy, 2),
-                  "date": latest["date"]
+                  "value": latest["value"],
+                  "date": latest["date"],
+                  "history": history
               }
 
 
-          def get_monthly_change(series_id):
+          def get_value_with_history(
+              series_id,
+              history_count=5
+          ):
+
               observations = fetch_fred_observations(
                   series_id,
-                  limit=10
+                  limit=max(history_count + 10, 20)
+              )
+
+              if not observations:
+                  raise RuntimeError(
+                      f"No valid observation found for {series_id}"
+                  )
+
+              history = []
+
+              for observation in observations[
+                  :history_count
+              ]:
+
+                  history.append({
+                      "value": float(
+                          observation["value"]
+                      ),
+                      "date": observation["date"]
+                  })
+
+
+              return {
+                  "value": history[0]["value"],
+                  "date": history[0]["date"],
+                  "history": history
+              }
+
+
+          def get_monthly_change_history(
+              series_id,
+              count=4
+          ):
+
+              observations = fetch_fred_observations(
+                  series_id,
+                  limit=count + 5
               )
 
               if len(observations) < 2:
@@ -158,23 +227,39 @@ jobs:
                       f"Not enough observations for {series_id}"
                   )
 
-              latest = observations[0]
-              previous = observations[1]
+              history = []
 
-              change = (
-                  float(latest["value"])
-                  - float(previous["value"])
+              max_changes = min(
+                  count,
+                  len(observations) - 1
               )
 
+              for i in range(max_changes):
+
+                  latest = observations[i]
+                  previous = observations[i + 1]
+
+                  change = (
+                      float(latest["value"])
+                      - float(previous["value"])
+                  )
+
+                  history.append({
+                      "value": round(change, 0),
+                      "date": latest["date"]
+                  })
+
+
               return {
-                  "value": round(change, 0),
-                  "date": latest["date"]
+                  "value": history[0]["value"],
+                  "date": history[0]["date"],
+                  "history": history
               }
 
 
-          # -------------------------
+          # =========================
           # 股票市场 Stock Market
-          # -------------------------
+          # =========================
 
           sp500 = get_latest_with_change_percent(
               "SP500"
@@ -185,47 +270,74 @@ jobs:
           )
 
 
-          # -------------------------
+          # =========================
           # 利率 Interest Rates
-          # -------------------------
+          # =========================
 
-          fed_rate = get_latest_fred_value("DFF")
+          fed_rate = get_latest_fred_value(
+              "DFF"
+          )
 
-          treasury2 = get_latest_fred_value("DGS2")
+          treasury2 = get_value_with_history(
+              "DGS2",
+              history_count=6
+          )
 
-          treasury10 = get_latest_fred_value("DGS10")
+          treasury10 = get_value_with_history(
+              "DGS10",
+              history_count=6
+          )
 
-          real_yield10 = get_latest_fred_value("DFII10")
+          real_yield10 = get_value_with_history(
+              "DFII10",
+              history_count=6
+          )
 
 
-          # -------------------------
+          # =========================
           # 通胀 Inflation
-          # -------------------------
+          # =========================
 
-          cpi = get_yoy_fred_value("CPIAUCSL")
+          cpi = get_yoy_fred_value(
+              "CPIAUCSL"
+          )
 
-          core_cpi = get_yoy_fred_value("CPILFESL")
+          core_cpi = get_yoy_fred_value(
+              "CPILFESL"
+          )
 
-          core_pce = get_yoy_fred_value("PCEPILFE")
+          core_pce = get_yoy_fred_value(
+              "PCEPILFE"
+          )
 
 
-          # -------------------------
+          # =========================
           # 经济 Economy
-          # -------------------------
+          # =========================
 
-          unemployment = get_latest_fred_value("UNRATE")
+          unemployment = get_value_with_history(
+              "UNRATE",
+              history_count=4
+          )
 
-          payrolls = get_monthly_change("PAYEMS")
+          payrolls = get_monthly_change_history(
+              "PAYEMS",
+              count=4
+          )
 
-          claims = get_latest_fred_value("ICSA")
+          claims = get_value_with_history(
+              "ICSA",
+              history_count=5
+          )
 
 
-          # -------------------------
+          # =========================
           # 市场风险 Market Risk
-          # -------------------------
+          # =========================
 
-          hy_spread = get_latest_fred_value(
-              "BAMLH0A0HYM2"
+          hy_spread = get_value_with_history(
+              "BAMLH0A0HYM2",
+              history_count=6
           )
 
           wti = get_latest_fred_value(
@@ -236,16 +348,18 @@ jobs:
               "DTWEXBGS"
           )
 
-          vix = get_latest_fred_value(
-              "VIXCLS"
+          vix = get_value_with_history(
+              "VIXCLS",
+              history_count=6
           )
 
 
-          # -------------------------
+          # =========================
           # 输出 data.json
-          # -------------------------
+          # =========================
 
           output = {
+
               "sp500": sp500,
               "nasdaq": nasdaq,
 
@@ -283,7 +397,13 @@ jobs:
               )
 
 
-          print(output)
+          print(
+              json.dumps(
+                  output,
+                  ensure_ascii=False,
+                  indent=2
+              )
+          )
 
           PY
 
@@ -298,6 +418,6 @@ jobs:
           if git diff --cached --quiet; then
             echo "No changes to commit."
           else
-            git commit -m "Update market data"
+            git commit -m "Update market data with trend history"
             git push
           fi
