@@ -1,11 +1,11 @@
-const CACHE_NAME = "us-market-dashboard-v1";
+const CACHE_NAME = "us-market-dashboard-v2";
 
 const APP_FILES = [
   "./",
   "./index.html",
   "./manifest.json",
-  "./icon-192.png",
-  "./icon-512.png"
+  "./usmarketicon-192.png",
+  "./usmarketicon512.png"
 ];
 
 // 安装：缓存 App 的基本文件
